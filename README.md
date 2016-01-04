@@ -1,10 +1,10 @@
 #Diskmap
 
 ##Description:
-A disk space visualization utility. This program displays all the files and folders within a selected location as rectangle map where each rectangle is proportional to the size of the file it represents.
+A disk space visualization utility. This program displays all the files and folders within a selected location as a rectangle map where each rectangle is proportional to the size of the file it represents.
 
 ##Features:
-- Graphical visualization of files and folders
+- Colourful graphical visualization of files and folders
 - Detailed information of files selected in the visualizer
 - Ability to move, rename and delete files in the visualizer
 
