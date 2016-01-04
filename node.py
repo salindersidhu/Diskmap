@@ -8,7 +8,7 @@ class Node(object):
         self.key = obj
         self.children = []
 
-    def add_child(self, node):
+    def add(self, node):
         '''(Node, Node) -> NoneType
         Append node as a child to the parent self.'''
         self.children.append(node)
