@@ -1,4 +1,5 @@
 from PyQt4 import QtGui, QtCore
+from random import uniform
 from treemap import Treemap
 
 
@@ -18,7 +19,17 @@ class TileFrame(QtGui.QFrame):
         # Set strong policy for focusing keyboard events to Tileframe
         self.setFocusPolicy(QtCore.Qt.StrongFocus)
 
-    def _buildTiles(self, painter, node, size, location):
+    def __randomColourHSV():
+        '''(None) -> tupple
+        Return a random colour using an aesthetically pleasing colour
+        palette. The colour is in the form of a 3-tupple with HSV values.'''
+        goldenRatioConjugate = 0.618033988749895
+        h = uniform(0, 1)
+        h += goldenRatioConjugate
+        h %= 1
+        return (h, 0.5, 0.95)
+
+    def __buildTiles(self, painter, node, size, location):
         ''''''
         pass
 
@@ -39,7 +50,7 @@ class TileFrame(QtGui.QFrame):
             # Set the initial conditions and render the Treemap
             size = [self.width(), self.height()]
             location = [0, 0]
-            self._buildTiles(painter, self.__treemap, size, location)
+            self.__buildTiles(painter, self.__treemap, size, location)
         else:
             # Draw the default background
             painter.fillRect(0, 0, self.width(), self.height(), self.__bgCol)

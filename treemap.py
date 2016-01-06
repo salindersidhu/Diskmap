@@ -1,5 +1,4 @@
 import os
-from random import uniform
 from node import Node
 from file import File
 from directory import Directory
@@ -12,16 +11,6 @@ class Treemap(object):
         '''(Treemap) -> NoneType
         Create a new Treemap.'''
         self.root = None
-
-    def __randomColourHSV():
-        '''(None) -> tuple
-        Return a random colour using an aesthetically pleasing colour
-        palette. The colour is in the form of 3-tupple with HSV values.'''
-        goldenRatioConjugate = 0.618033988749895
-        h = uniform(0, 1)
-        h += goldenRatioConjugate
-        h %= 1
-        return (h, 0.5, 0.95)
 
     def __build(self, directory):
         '''(Treemap, str) -> Node.
@@ -43,7 +32,7 @@ class Treemap(object):
                 dirSize += node.key.size
             else:
                 # Create a File node and add it to the current Directory's Node
-                node = Node(File(itemPath, itemSize, self.__randomColourHSV()))
+                node = Node(File(itemPath, itemSize))
                 dirNode.add(node)
                 dirSize += itemSize
         # Save new filesize to directory object

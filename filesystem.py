@@ -1,8 +1,7 @@
 class FileSystem(object):
 
-    def __init__(self, path, size, color=None):
+    def __init__(self, path, size):
         '''(FileSystem, str, int, tuple) -> NoneType
-        Create a new FileSystem with path, size and color.'''
+        Create a new FileSystem with path and size.'''
         self.path = path
         self.size = size
-        self.color = color
