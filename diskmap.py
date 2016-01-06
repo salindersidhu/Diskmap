@@ -14,7 +14,8 @@ class DiskmapApp(QtGui.QApplication):
         self.__FPS = 60
         self.__defaultStatus = "Please open a directory..."
         # Configure the GUIWindow
-        self.__window = GUIWindow('Diskmap', 640, 360, 'Resources/icon.png')
+        self.__window = GUIWindow('Diskap - Disk Visualization Utility', 640,
+                                  360, 'Resources/icon.png')
         # Configure the Tileframe
         self.__tileframe = TileFrame(self.__window)
         self.__window.setCentralWidget(self.__tileframe)

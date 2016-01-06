@@ -10,12 +10,17 @@ class TileFrame(QtGui.QFrame):
         super(TileFrame, self).__init__(parentWindow)
         # TileFrame variables
         self.__treemap = None
+        self.__fillCol = QtGui.QColor(0, 0, 0)
         self.__bgCol = QtGui.QColor(64, 64, 64)
         self.__txtCol = QtGui.QColor(38, 38, 38)
         self.__txtFont = QtGui.QFont('CopperBlack', 60, QtGui.QFont.Bold)
         self.__txt = "Visualizer"
         # Set strong policy for focusing keyboard events to Tileframe
         self.setFocusPolicy(QtCore.Qt.StrongFocus)
+
+    def _buildTiles(self, painter, node, size, location):
+        ''''''
+        pass
 
     def clearMap(self):
         ''''''
@@ -31,7 +36,10 @@ class TileFrame(QtGui.QFrame):
         # Clear all drawings on the GridFrame
         painter.eraseRect(0, 0, self.width(), self.height())
         if self.__treemap:
-            pass
+            # Set the initial conditions and render the Treemap
+            size = [self.width(), self.height()]
+            location = [0, 0]
+            self._buildTiles(painter, self.__treemap, size, location)
         else:
             # Draw the default background
             painter.fillRect(0, 0, self.width(), self.height(), self.__bgCol)
