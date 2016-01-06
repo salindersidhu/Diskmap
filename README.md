@@ -6,6 +6,7 @@ A disk space visualization utility. This program displays all the files and fold
 ##Features:
 - Colourful graphical visualization of files and folders
 - Detailed information of files selected in the visualizer
+- Ability to save screenshots of the visualization
 - Ability to move, rename and delete files in the visualizer
 
 ##Supports:
