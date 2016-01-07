@@ -20,8 +20,7 @@ class TileFrame(QtGui.QFrame):
         self.setFocusPolicy(QtCore.Qt.StrongFocus)
 
     def __randomColourHSV():
-        '''(None) -> tupple
-        Return a random colour using an aesthetically pleasing colour
+        '''Return a random colour using an aesthetically pleasing colour
         palette. The colour is in the form of a 3-tupple with HSV values.'''
         goldenRatioConjugate = 0.618033988749895
         h = uniform(0, 1)
@@ -33,13 +32,18 @@ class TileFrame(QtGui.QFrame):
         ''''''
         pass
 
+    def screenshot(self, filename):
+        ''''''
+        QtGui.QPixmap.grabWindow(self.winId()).save(filename, 'png')
+
     def clearMap(self):
         ''''''
         self.__treemap = None
 
-    def updateMap(self, treemap):
+    def updateMap(self, directory):
         ''''''
-        self.__treemap = treemap
+        self.__treemap = Treemap()
+        self.__treemap.build(directory)
 
     def paintEvent(self, event):
         ''''''

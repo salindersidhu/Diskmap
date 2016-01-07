@@ -8,15 +8,13 @@ class Treemap(object):
     '''A Treemap class.'''
 
     def __init__(self):
-        '''(Treemap) -> NoneType
-        Create a new Treemap.'''
+        '''Create a new Treemap.'''
         self.root = None
 
     def __build(self, directory):
-        '''(Treemap, str) -> Node.
-        Return the root of a sub tree containing an arbitrary number of Nodes
-        with keys representing all the files and folders in directory as File
-        and Directory objects.'''
+        '''Return the root of a sub tree containing an arbitrary number of
+        Nodes with keys representing all the files and folders in directory as
+        File and Directory objects.'''
         dirNode = Node(Directory(directory, 0))
         dirSize = 0
         # Search for all files and folders within the directory
@@ -40,24 +38,11 @@ class Treemap(object):
         return dirNode
 
     def build(self, directory):
-        '''(Treemap, str) -> NoneType
-        Create a tree with the root associated with a Node with key Directory
-        associated with directory and an arbitrary number of children Nodes
-        with key associated with File and Directory objects.'''
+        '''Create a tree with the root associated with a Node with key
+        Directory associated with directory and an arbitrary number of children
+        Nodes with key associated with File and Directory objects.'''
         self.root = self.__build(directory)
 
     def getRoot(self):
-        '''(Treemap) -> Node
-        Return the root of the entire Treemap.'''
+        '''Return the root of the entire Treemap.'''
         return self.root
-
-    def getFileInfo(self, path):
-        '''(Treemap, str) -> list
-        Return a tuple (file path, size and percentage relative to the total
-        size of the Directory associated with the root of Treemap) of the File
-        associated with path.'''
-        totalSize = float(self.root.key.size)
-        node = self._search(path, self.root)  # Find the correct Node
-        percent = (node.key.size / totalSize) * 100
-        size = node.key.size / 1024  # 1024 bytes equal exactly 1 KB
-        return [path, size, percent]

@@ -3,12 +3,10 @@ class Node(object):
     branching factor).'''
 
     def __init__(self, obj):
-        '''(Node, object) -> NoneType
-        Create a new node with a key obj and an empty list of children.'''
+        '''Create a new node with a key obj and an empty list of children.'''
         self.key = obj
         self.children = []
 
     def add(self, node):
-        '''(Node, Node) -> NoneType
-        Append node as a child to the parent self.'''
+        '''Append node as a child to the parent self.'''
         self.children.append(node)

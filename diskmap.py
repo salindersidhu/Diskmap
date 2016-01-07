@@ -35,14 +35,49 @@ class DiskmapApp(QtGui.QApplication):
         '''Add all the menu items, along with their event functions, used in
         the application to GUIWindow.'''
         # Setup File menu items
-        self.__window.addMenuItem('File', 'Load Directory', None)
+        self.__window.addMenuItem('File', 'Map Folder', self.__eventMapFolder)
         self.__window.addMenuSeperator('File')
         self.__window.addMenuItem('File', 'Quit', self.__window.close)
         # Setup Option menu items
-        self.__window.addMenuItem('Options', 'Screenshot', None)
-        self.__window.addMenuItem('Options', 'Clear Map', None)
+        self.__window.addMenuItem('Options', 'Screenshot',
+                                  self.__eventScreenshot)
+        self.__window.addMenuItem('Options', 'Clear Map', self.__eventClearMap)
         # Setup Help menu items
         self.__window.addMenuItem('Help', 'About', self.__eventAbout)
+
+    def __eventScreenshot(self):
+        ''''''
+        filename = QtGui.QFileDialog.getSaveFileName(self.__window,
+                                                     'Save Screenshot', '',
+                                                     'Images (*.png)',
+                                                     options=QtGui.
+                                                     QFileDialog.
+                                                     DontUseNativeDialog)
+        if filename:
+            if not filename.endswith('.png'):
+                filename += '.png'
+            self.__tileframe.screenshot(filename)
+
+    def __eventMapFolder(self):
+        ''''''
+        flags = QtGui.QFileDialog.ShowDirsOnly | QtGui.QFileDialog.\
+            DontUseNativeDialog
+        folder = QtGui.QFileDialog.getExistingDirectory(None,
+                                                        'Select a folder:',
+                                                        'C:\\', flags)
+        if folder:
+            self.__tileframe.updateMap(folder)
+            self.__window.setStatusBar('')
+
+    def __eventClearMap(self):
+        ''''''
+        message = "Are you sure you want to visualization map?"
+        result = QtGui.QMessageBox.question(self.__window, 'Message', message,
+                                            QtGui.QMessageBox.Yes,
+                                            QtGui.QMessageBox.No)
+        if result == QtGui.QMessageBox.Yes:
+            self.__tileframe.clearMap()
+            self.__window.setStatusBar(self.__defaultStatus)
 
     def __eventAbout(self):
         '''Display an information dialog about the program languages and tools
