@@ -21,28 +21,26 @@ class DiskmapApp(QtGui.QApplication):
         # Configure the Tileframe
         self.__tileframe = TileFrame(self.__window)
         self.__window.setCentralWidget(self.__tileframe)
+        self.__window.setMouseTracking(True)
         # Setup remaining GUI elements
         self.__setupMenu()
+        self.__setupMouseEvents()
         self.__setupMenuItems()
         self.__window.setStatusBar(self.__defaultStatus)
         self.__window.show()
-
-    def __logExceptionToFile(self, exceptionTrace):
-        '''Display an error message and write the exception trace to a
-        specified log file.'''
-        message = 'The application has crashed!\n\nPlease refer to ' + \
-            self.__debugLog + ' for more information!'
-        QtGui.QMessageBox.critical(self.__window, 'Error', message,
-                                   buttons=QtGui.QMessageBox.Ok)
-        debugFile = open(self.__debugLog, 'w')
-        debugFile.write(exceptionTrace)
-        debugFile.close()
 
     def __setupMenu(self):
         '''Add all the menus used in the application to GUIWindow.'''
         self.__window.addMenu('File')
         self.__window.addMenu('Options')
+        self.__window.addMenu('Settings')
         self.__window.addMenu('Help')
+
+    def __setupMouseEvents(self):
+        ''''''
+        mouseEvents = []
+        mouseEvents.append(self.__eventUpdateStatus)
+        self.__window.updateMouseEvents(mouseEvents)
 
     def __setupMenuItems(self):
         '''Add all the menu items, along with their event functions, used in
@@ -55,8 +53,28 @@ class DiskmapApp(QtGui.QApplication):
         self.__window.addMenuItem('Options', 'Screenshot',
                                   self.__eventScreenshot)
         self.__window.addMenuItem('Options', 'Clear Map', self.__eventClearMap)
+        # Setup Settings menu items
+        self.__window.addMenuItem('Settings', 'Toggle Gradient',
+                                  self.__eventToggleGradient)
+        self.__window.addMenuItem('Settings', 'Toggle Borders',
+                                  self.__eventToggleBorders)
         # Setup Help menu items
         self.__window.addMenuItem('Help', 'About', self.__eventAbout)
+
+    def __eventUpdateStatus(self, event):
+        ''''''
+        node = self.__tileframe.getHoveredNode(event)
+        if node:
+            path = node.key.path.replace('\\','/')
+            self.__window.setStatusBar(path)
+
+    def __eventToggleBorders(self):
+        ''''''
+        self.__tileframe.toggleBorders()
+
+    def __eventToggleGradient(self):
+        ''''''
+        self.__tileframe.toggleGradient()
 
     def __eventScreenshot(self):
         ''''''
@@ -79,13 +97,9 @@ class DiskmapApp(QtGui.QApplication):
                                                         'Select a folder:',
                                                         'C:\\', flags)
         if folder:
-            try:
-                # Update the map and build the tiles
-                self.__tileframe.updateMap(folder)
-            except:
-                # Exception was caught, log it and terminate application
-                self.__logExceptionToFile(traceback.format_exc())
-                self.__window.close()
+            # Update the map and build the tiles
+            self.__tileframe.updateMap(folder)
+            self.__window.setStatusBar('')
 
     def __eventClearMap(self):
         ''''''

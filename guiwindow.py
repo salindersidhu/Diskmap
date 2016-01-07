@@ -21,6 +21,7 @@ class GUIWindow(QtGui.QMainWindow):
         self.__menuDict = {}                    # Define a map of Menus
         self.__statusLabel = QtGui.QLabel()     # Define a new status label
         self.__keyInputDict = {}                # Define a map of key events
+        self.__mouseEvents = []                 # Define a list of mouse events
         # Configure the window's properties
         self.setGeometry(0, 0, winWidth, winHeight)
         self.setMinimumSize(winWidth / 2, winHeight / 2)
@@ -44,6 +45,11 @@ class GUIWindow(QtGui.QMainWindow):
         if eventKey in self.__keyInputDict:
             self.__keyInputDict[eventKey][1]()
 
+    def mouseMoveEvent(self, event):
+        '''Handle and process all mouse movement events.'''
+        for func in self.__mouseEvents:
+            func(event)
+
     def __centerOnScreen(self):
         '''Move the position of the window so that it is positioned perfectly
         in the center of the screen.'''
@@ -51,6 +57,11 @@ class GUIWindow(QtGui.QMainWindow):
         move_width = (res.width() / 2) - (self.frameSize().width() / 2)
         move_height = (res.height() / 2) - (self.frameSize().height() / 2)
         self.move(move_width, move_height)
+
+    def updateMouseEvents(self, mouseEvents):
+        '''Change the current value of the mouse event list to the events
+        specified by mouseEvents.'''
+        self.__mouseEvents = mouseEvents[:]
 
     def updateKeyBindings(self, keyBindings):
         '''Change the current value of the keys and their events for keypress

@@ -5,10 +5,10 @@ A disk space visualization utility. This program displays all the files and fold
 
 ##To Do Tasks:
 - [ ] Add right click popup menu with options to view info, move, rename, delete and map the folder of a file
-- [ ] Add the name of the file mouse hovered to the status bar
+- [X] Add the name of the file mouse hovered to the status bar
 - [ ] Visually show hovered files as lighter colour
 - [ ] Add settings and option for gradients
-- [X] Add crash log
+- [X] Add settings and option for borders
 - [ ] Finish documentation
 
 ##Features:
@@ -41,9 +41,6 @@ A disk space visualization utility. This program displays all the files and fold
 3. To install PyQt 4 run the following command from the terminal `sudo apt-get install python3-pyqt4`
 4. Navigate to the cloned repo's directory from the terminal using the `cd` command
 5. Run the following command from the terminal, `python3 diskmap.py` to launch the Visualizer
-
-##Troubleshooting:
-This application is cross platform compatible with most operating systems (Windows, Linux and MAC). If the application crashes, a log is generated in the application's directory. This log contains error and exception details on why the application crashed.
 
 ##License:
 Copyright (c) 2016 Salinder Sidhu
