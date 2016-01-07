@@ -1,4 +1,5 @@
 import sys
+import traceback
 from PyQt4 import QtGui, QtCore
 from guiwindow import GUIWindow
 from tileframe import TileFrame
@@ -13,6 +14,7 @@ class DiskmapApp(QtGui.QApplication):
         # Application variables
         self.__FPS = 60
         self.__defaultStatus = "Please open a folder to map..."
+        self.__debugLog = 'debugLog.txt'
         # Configure the GUIWindow
         self.__window = GUIWindow('Diskap - Disk Visualization Utility', 640,
                                   360, 'Resources/icon.png')
@@ -24,6 +26,17 @@ class DiskmapApp(QtGui.QApplication):
         self.__setupMenuItems()
         self.__window.setStatusBar(self.__defaultStatus)
         self.__window.show()
+
+    def __logExceptionToFile(self, exceptionTrace):
+        '''Display an error message and write the exception trace to a
+        specified log file.'''
+        message = 'The application has crashed!\n\nPlease refer to ' + \
+            self.__debugLog + ' for more information!'
+        QtGui.QMessageBox.critical(self.__window, 'Error', message,
+                                   buttons=QtGui.QMessageBox.Ok)
+        debugFile = open(self.__debugLog, 'w')
+        debugFile.write(exceptionTrace)
+        debugFile.close()
 
     def __setupMenu(self):
         '''Add all the menus used in the application to GUIWindow.'''
@@ -66,7 +79,13 @@ class DiskmapApp(QtGui.QApplication):
                                                         'Select a folder:',
                                                         'C:\\', flags)
         if folder:
-            self.__tileframe.updateMap(folder)
+            try:
+                # Update the map and build the tiles
+                self.__tileframe.updateMap(folder)
+            except:
+                # Exception was caught, log it and terminate application
+                self.__logExceptionToFile(traceback.format_exc())
+                self.__window.close()
 
     def __eventClearMap(self):
         ''''''

@@ -8,7 +8,7 @@ A disk space visualization utility. This program displays all the files and fold
 - [ ] Add the name of the file mouse hovered to the status bar
 - [ ] Visually show hovered files as lighter colour
 - [ ] Add settings and option for gradients
-- [ ] Add crash log
+- [X] Add crash log
 - [ ] Finish documentation
 
 ##Features:
@@ -25,6 +25,25 @@ A disk space visualization utility. This program displays all the files and fold
 ##Dependencies:
 - `Python 3` [(Build 3.4)](https://www.python.org/downloads/)
 - `PyQt 4` [(Build 4.11)](https://riverbankcomputing.com/software/pyqt/download)
+
+##Running the Visualizer:
+
+###Windows:
+1. Clone the repo to obtain the source code
+2. Download and install `Python3`
+3. Download and install `PyQt 4`
+4. Open a `command prompt` and navigate to the cloned repo's directory using the `cd` command
+5. Run the following command, `python diskmap.py` to launch the Visualizer
+
+###Linux:
+1. Clone the repo to obtain the source code
+2. If needed, install python3 by running the command `sudo apt-get install python3` from the terminal
+3. To install PyQt 4 run the following command from the terminal `sudo apt-get install python3-pyqt4`
+4. Navigate to the cloned repo's directory from the terminal using the `cd` command
+5. Run the following command from the terminal, `python3 diskmap.py` to launch the Visualizer
+
+##Troubleshooting:
+This application is cross platform compatible with most operating systems (Windows, Linux and MAC). If the application crashes, a log is generated in the application's directory. This log contains error and exception details on why the application crashed.
 
 ##License:
 Copyright (c) 2016 Salinder Sidhu
