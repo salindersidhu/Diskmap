@@ -3,11 +3,20 @@
 ##Description:
 A disk space visualization utility. This program displays all the files and folders within a selected location as a rectangle map where each rectangle is proportional to the size of the file it represents.
 
+##To Do Tasks:
+- [ ] Add right click popup menu with options to view info, move, rename, delete and map the folder of a file
+- [ ] Add the name of the file mouse hovered to the status bar
+- [ ] Visually show hovered files as lighter colour
+- [ ] Add settings and option for gradients
+- [ ] Add crash log
+- [ ] Finish documentation
+
 ##Features:
-- Colourful graphical visualization of files and folders
-- Detailed information of files selected in the visualizer
+- Graphical visualization of files and folders
+- Ability to view detailed information of selected files in the visualizer
 - Ability to save screenshots of the visualization
 - Ability to move, rename and delete files in the visualizer
+- Ability to map subfolders in the visualizer
 
 ##Supports:
 - Microsoft Windows 7, 8, 8.1, 10

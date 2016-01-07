@@ -16,7 +16,7 @@ class Treemap(object):
     def __getRandomColour(self):
         ''''''
         h = random.randint(0, 360) / 360
-        return tuple(i * 255 for i in colorsys.hsv_to_rgb(h, 0.5, 0.95))
+        return tuple(i * 255 for i in colorsys.hsv_to_rgb(h, 0.6, 0.95))
 
     def __build(self, directory):
         '''Return the root of a sub tree containing an arbitrary number of
