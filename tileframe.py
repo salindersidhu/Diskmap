@@ -1,5 +1,4 @@
 from PyQt4 import QtGui, QtCore
-from random import uniform
 from treemap import Treemap
 
 
@@ -11,7 +10,7 @@ class TileFrame(QtGui.QFrame):
         super(TileFrame, self).__init__(parentWindow)
         # TileFrame variables
         self.__treemap = None
-        self.__fillCol = QtGui.QColor(0, 0, 0)
+        self.__borderCol = QtGui.QColor(0, 0, 0)
         self.__bgCol = QtGui.QColor(64, 64, 64)
         self.__txtCol = QtGui.QColor(38, 38, 38)
         self.__txtFont = QtGui.QFont('CopperBlack', 60, QtGui.QFont.Bold)
@@ -19,18 +18,46 @@ class TileFrame(QtGui.QFrame):
         # Set strong policy for focusing keyboard events to Tileframe
         self.setFocusPolicy(QtCore.Qt.StrongFocus)
 
-    def __randomColourHSV():
-        '''Return a random colour using an aesthetically pleasing colour
-        palette. The colour is in the form of a 3-tupple with HSV values.'''
-        goldenRatioConjugate = 0.618033988749895
-        h = uniform(0, 1)
-        h += goldenRatioConjugate
-        h %= 1
-        return (h, 0.5, 0.95)
-
     def __buildTiles(self, painter, node, size, location):
         ''''''
-        pass
+        borderRect = QtCore.QRect(location[0], location[1], size[0], size[1])
+        # Shift the dimensions of the rectangle
+        location[0] += 1
+        location[1] += 1
+        size[0] -= 2
+        size[1] -= 2
+        totalSize = max(float(node.key.size), 1)  # Prevent ZeroDivisionError
+        for item in node.children:
+            percent = item.key.size / totalSize
+            itemArea = (size[0] * size[1]) * percent
+            # Calculate dimensions of the rectangle
+            if size[1] > size[0]:
+                width = size[0]
+                height = itemArea / width
+                # Draw rectangle
+                self.__drawRectangle(painter, item, [width, height], location)
+                location[1] += height
+            else:
+                height = size[1]
+                width = itemArea / height
+                # Draw rectangle
+                self.__drawRectangle(painter, item, [width, height], location)
+                location[0] += width
+        # Draw the border around the rectangle
+        painter.setBrush(QtCore.Qt.NoBrush)
+        painter.setPen(self.__borderCol)
+        painter.drawRect(borderRect)
+
+    def __drawRectangle(self, painter, node, size, location):
+        ''''''
+        # If the node is associated with a colour
+        if node.key.colour:
+            rect = QtCore.QRect(location[0], location[1], size[0], size[1])
+            # Obtain the file's colour and render the tile
+            rgb = node.key.colour
+            painter.fillRect(rect, QtGui.QColor(rgb[0], rgb[1], rgb[2]))
+        # Recursively render the next level of tiles
+        self.__buildTiles(painter, node, size, location[:])
 
     def screenshot(self, filename):
         ''''''
@@ -54,7 +81,8 @@ class TileFrame(QtGui.QFrame):
             # Set the initial conditions and render the Treemap
             size = [self.width(), self.height()]
             location = [0, 0]
-            self.__buildTiles(painter, self.__treemap, size, location)
+            self.__buildTiles(painter, self.__treemap.getRoot(), size,
+                              location)
         else:
             # Draw the default background
             painter.fillRect(0, 0, self.width(), self.height(), self.__bgCol)

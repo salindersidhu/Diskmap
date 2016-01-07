@@ -12,7 +12,7 @@ class DiskmapApp(QtGui.QApplication):
         super(DiskmapApp, self).__init__(args)
         # Application variables
         self.__FPS = 60
-        self.__defaultStatus = "Please open a directory..."
+        self.__defaultStatus = "Please open a folder to map..."
         # Configure the GUIWindow
         self.__window = GUIWindow('Diskap - Disk Visualization Utility', 640,
                                   360, 'Resources/icon.png')
@@ -67,11 +67,10 @@ class DiskmapApp(QtGui.QApplication):
                                                         'C:\\', flags)
         if folder:
             self.__tileframe.updateMap(folder)
-            self.__window.setStatusBar('')
 
     def __eventClearMap(self):
         ''''''
-        message = "Are you sure you want to visualization map?"
+        message = "Are you sure you want to clear the visualization map?"
         result = QtGui.QMessageBox.question(self.__window, 'Message', message,
                                             QtGui.QMessageBox.Yes,
                                             QtGui.QMessageBox.No)

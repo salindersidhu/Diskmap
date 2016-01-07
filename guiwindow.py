@@ -23,7 +23,7 @@ class GUIWindow(QtGui.QMainWindow):
         self.__keyInputDict = {}                # Define a map of key events
         # Configure the window's properties
         self.setGeometry(0, 0, winWidth, winHeight)
-        self.setFixedSize(winWidth, winHeight)
+        self.setMinimumSize(winWidth / 2, winHeight / 2)
         self.setWindowTitle(winTitle)
         self.setWindowIcon(QtGui.QIcon(winIcon))
         # Bind the QLabel to the Status Bar

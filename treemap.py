@@ -1,4 +1,6 @@
 import os
+import colorsys
+import random
 from node import Node
 from file import File
 from directory import Directory
@@ -10,6 +12,11 @@ class Treemap(object):
     def __init__(self):
         '''Create a new Treemap.'''
         self.root = None
+
+    def __getRandomColour(self):
+        ''''''
+        h = random.randint(0, 360) / 360
+        return tuple(i * 255 for i in colorsys.hsv_to_rgb(h, 0.5, 0.95))
 
     def __build(self, directory):
         '''Return the root of a sub tree containing an arbitrary number of
@@ -30,7 +37,7 @@ class Treemap(object):
                 dirSize += node.key.size
             else:
                 # Create a File node and add it to the current Directory's Node
-                node = Node(File(itemPath, itemSize))
+                node = Node(File(itemPath, itemSize, self.__getRandomColour()))
                 dirNode.add(node)
                 dirSize += itemSize
         # Save new filesize to directory object
