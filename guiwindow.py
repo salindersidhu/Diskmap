@@ -5,7 +5,7 @@ class GUIWindow(QtGui.QMainWindow):
     '''GUIWindow the extends the QtGui.QMainWindow class. It creates a basic
     window that contains a MenuBar and a StatusBar, both of which are
     modifiable. The window includes advanced functionality such as appearing in
-    the center of the screen binding of key press and release events.'''
+    the center of the screen binding of key and mouse events.'''
 
     def __init__(self, winTitle, winWidth, winHeight, winIcon):
         '''Create a new GUIWindow with a specific window title, width, height
@@ -17,11 +17,14 @@ class GUIWindow(QtGui.QMainWindow):
         self.__menuNotFoundException = Exception('The specified menu was ' +
                                                  'not found!')
         # GUIWindow variables
-        self.__menubar = self.menuBar()         # Define a Menu Bar
-        self.__menuDict = {}                    # Define a map of Menus
-        self.__statusLabel = QtGui.QLabel()     # Define a new status label
-        self.__keyInputDict = {}                # Define a map of key events
-        self.__mouseEvents = []                 # Define a list of mouse events
+        self.__menubar = self.menuBar()         # Menu Bar
+        self.__menuDict = {}                    # Map of Menus for Menubar
+        self.__statusLabel = QtGui.QLabel()     # New Status label
+        self.__keyInputDict = {}                # Map of key events
+        self.__checkableActions = {}            # Map of checkable QActions
+        self.__mouseMoveEvents = []             # List of mouse move events
+        self.__mouseClickEvents = []            # List of mouse click events
+        self.__mouseReleaseEvents = []          # List of mouse release events
         # Configure the window's properties
         self.setGeometry(0, 0, winWidth, winHeight)
         self.setMinimumSize(winWidth / 2, winHeight / 2)
@@ -47,7 +50,17 @@ class GUIWindow(QtGui.QMainWindow):
 
     def mouseMoveEvent(self, event):
         '''Handle and process all mouse movement events.'''
-        for func in self.__mouseEvents:
+        for func in self.__mouseMoveEvents:
+            func(event)
+
+    def mousePressEvent(self, event):
+        '''Handle and process all mouse click events.'''
+        for func in self.__mouseClickEvents:
+            func(event)
+
+    def mouseReleaseEvent(self, event):
+        '''Handle and process all mouse release events.'''
+        for func in self.__mouseReleaseEvents:
             func(event)
 
     def __centerOnScreen(self):
@@ -58,10 +71,12 @@ class GUIWindow(QtGui.QMainWindow):
         move_height = (res.height() / 2) - (self.frameSize().height() / 2)
         self.move(move_width, move_height)
 
-    def updateMouseEvents(self, mouseEvents):
-        '''Change the current value of the mouse event list to the events
-        specified by mouseEvents.'''
-        self.__mouseEvents = mouseEvents[:]
+    def updateMouseEvents(self, moveEvents, clickEvents, releaseEvents):
+        '''Update the mouse event lists for movement, clicking and releasing as
+        specified by the events in the lists from the parameters.'''
+        self.__mouseMoveEvents = moveEvents
+        self.__mouseClickEvents = clickEvents
+        self.__mouseReleaseEvents = releaseEvents
 
     def updateKeyBindings(self, keyBindings):
         '''Change the current value of the keys and their events for keypress
@@ -82,18 +97,48 @@ class GUIWindow(QtGui.QMainWindow):
             self.__menuDict[menuTitle] = \
                 self.__menubar.addMenu('&' + menuTitle)
 
-    def addMenuItem(self, menuTitle, menuItem, evtFunction=None):
+    def addMenuItem(self, menuTitle, menuItemName, evtFunction=None):
         '''Add a new menu item to an existing menu with a title specified by
         menuTitle. Connect an event function to the menu item if the specified
         value is not None.'''
         # Check if menuTitle exists
         if menuTitle in self.__menuDict:
             # Create the menu item
-            menuItem = QtGui.QAction('&' + menuItem, self)
+            menuItem = QtGui.QAction('&' + menuItemName, self)
             if evtFunction:
                 menuItem.triggered.connect(lambda: evtFunction())
             # Add the menu items to the menu item dictionary
             self.__menuDict[menuTitle].addAction(menuItem)
+        else:
+            raise self.__menuNotFoundExceptionException
+
+    def addCheckableMenuItem(self, menuTitle, menuItemName, isChecked,
+                             evtFunction=None):
+        '''Add a new checkable menu item to an existing menu with a title
+        specified by menuTitle. Connect an event function to the checkable menu
+        item if the specified value is not None. The checkable menu item is
+        checked if the value of isChecked is True, unchecked if False.'''
+        # Check if menuTitle exists
+        if menuTitle in self.__menuDict:
+            # Create the checkable menu item and set the check flag
+            menuItem = QtGui.QAction('&' + menuItemName, self, checkable=True)
+            menuItem.setChecked(isChecked)
+            # Store menu action item
+            self.__checkableActions[menuItemName] = menuItem
+            if evtFunction:
+                menuItem.triggered.connect(lambda: evtFunction())
+            # Add the menu items to the menu item dictionary
+            self.__menuDict[menuTitle].addAction(menuItem)
+        else:
+            raise self.__menuNotFoundExceptionException
+
+    def setCheckedMenuItem(self, menuItem, isChecked):
+        '''Set a checkable menu menu item, specified by menuItem to checked
+        if isChecked is True, unchecked if False.'''
+        # Check if checkable menu item exists
+        if menuItem in self.__checkableActions:
+            # Set the checked menu item to the value of isChecked
+            self.__checkableActions[menuItem].setChecked(isChecked)
         else:
             raise self.__menuNotFoundExceptionException
 

@@ -4,21 +4,22 @@
 A disk space visualization utility. This program displays all the files and folders within a selected location as a rectangle map where each rectangle is proportional to the size of the file it represents.
 
 ##To Do Tasks:
-- [ ] Add right click popup menu with options to view info, move, rename, delete and map the folder of a file
+- [X] Add right click popup menu with options to rename, move and delete files
 - [X] Add the name of the file mouse hovered to the status bar
 - [ ] Visually show hovered files as lighter colour
 - [X] Add settings and option for gradients
 - [X] Add settings and option for borders
 - [ ] Fix bugs with rendering and file hovered indicator
 - [X] Refactor Node system
+- [X] Add Crash log
 - [ ] Finish documentation
 
 ##Features:
 - Graphical visualization of files and folders
-- Ability to view detailed information of selected files in the visualizer
-- Ability to save screenshots of the visualization
-- Ability to move, rename and delete files in the visualizer
-- Ability to map subfolders in the visualizer
+- Rename files in the visualizer
+- Move files in the visualizer
+- Delete files in the visualizer
+- Save screenshots of the visualization
 
 ##Supports:
 - Microsoft Windows 7, 8, 8.1, 10
@@ -42,6 +43,11 @@ A disk space visualization utility. This program displays all the files and fold
 3. To install PyQt 4 run the following command from the terminal `sudo apt-get install python3-pyqt4`
 4. Navigate to the cloned repo's directory from the terminal using the `cd` command
 5. Run the following command from the terminal, `python3 diskmap.py` to launch the Visualizer
+
+##Troubleshooting:
+This application is cross platform compatible with most operating systems (Windows, Linux and Mac). If the application crashes, a log is generated in the application's directory. This log contains error and exception details on why the application crashed. Please refer to the known issues below when reading the crash log.
+####PermissionError: [WinError 5] Access is denied:
+This occurs when you do not have permission on your user account to read files and folders on a Windows operating system. Windows, by default, is known to restrict access to specific protected files. This issue can be resolved by running `Diskmap` as an Administrator.
 
 ##License:
 Copyright (c) 2016 Salinder Sidhu

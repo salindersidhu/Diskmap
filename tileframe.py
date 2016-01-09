@@ -130,16 +130,20 @@ class TileFrame(QtGui.QFrame):
                                                                        rH)):
                 return item[1].getPath()
 
+    def isMapped(self):
+        ''''''
+        return self.__treemap
+
     def toggleBorders(self):
         ''''''
-        if self.__treemap:
+        if self.isMapped():
             # Toggle borders and update the tile rendering
             self.__isBorders = not self.__isBorders
             self.update()
 
     def toggleGradient(self):
         ''''''
-        if self.__treemap:
+        if self.isMapped():
             # Toggle gradient and update the tile rendering
             self.__isGradient = not self.__isGradient
             self.update()
@@ -150,15 +154,19 @@ class TileFrame(QtGui.QFrame):
 
     def clearMap(self):
         ''''''
-        self.__treemap = None
-        self.__rectMap = {}
-
-    def updateMap(self, directory):
-        ''''''
         # Reset the toggle variables
         self.__isBorders = True
         self.__isGradient = False
-        self.__rectMap = {}
+        # Clear the node rectangles
+        self.__rectNodes = {}
+        # Clear the Treemap
+        self.__treemap = None
+
+    def updateMap(self, directory, resetMap=True):
+        ''''''
+        # Clear the map if reset is True
+        if resetMap:
+            self.clearMap()
         # Build a new Treemap
         self.__treemap = Treemap()
         self.__treemap.build(directory)
@@ -169,7 +177,7 @@ class TileFrame(QtGui.QFrame):
         painter = QtGui.QPainter(self)  # Used to draw on the frame
         # Clear all drawings on the GridFrame
         painter.eraseRect(0, 0, self.width(), self.height())
-        if self.__treemap:
+        if self.isMapped():
             # Set the initial conditions and render the Treemap
             size = [self.width(), self.height()]
             location = [0, 0]

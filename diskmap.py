@@ -1,3 +1,4 @@
+import os
 import sys
 import traceback
 from PyQt4 import QtGui, QtCore
@@ -14,7 +15,9 @@ class DiskmapApp(QtGui.QApplication):
         # Application variables
         self.__FPS = 60
         self.__defaultStatus = "Please open a folder to map..."
-        self.__debugLog = 'debugLog.txt'
+        self.__crashLog = 'crashLog.txt'
+        self.__mappedDir = ''
+        self.__currentFile = ''
         # Configure the GUIWindow
         self.__window = GUIWindow('Diskmap - Disk Visualization Utility', 640,
                                   360, 'Resources/icon.png')
@@ -27,6 +30,7 @@ class DiskmapApp(QtGui.QApplication):
         self.__setupMouseEvents()
         self.__setupMenuItems()
         self.__window.setStatusBar(self.__defaultStatus)
+        # Render the window
         self.__window.show()
 
     def __setupMenu(self):
@@ -38,9 +42,14 @@ class DiskmapApp(QtGui.QApplication):
 
     def __setupMouseEvents(self):
         ''''''
-        mouseEvents = []
-        mouseEvents.append(self.__eventUpdateStatus)
-        self.__window.updateMouseEvents(mouseEvents)
+        moveEvents = []
+        clickEvents = []
+        releaseEvents = []
+        # Add function to mouse event lists
+        moveEvents.append(self.__eventUpdateStatus)
+        clickEvents.append(self.__eventPopupMenu)
+        # Bind the mouse functions to the mouse events
+        self.__window.updateMouseEvents(moveEvents, clickEvents, releaseEvents)
 
     def __setupMenuItems(self):
         '''Add all the menu items, along with their event functions, used in
@@ -54,18 +63,109 @@ class DiskmapApp(QtGui.QApplication):
                                   self.__eventScreenshot)
         self.__window.addMenuItem('Options', 'Clear Map', self.__eventClearMap)
         # Setup Settings menu items
-        self.__window.addMenuItem('Settings', 'Toggle Gradient',
-                                  self.__eventToggleGradient)
-        self.__window.addMenuItem('Settings', 'Toggle Borders',
-                                  self.__eventToggleBorders)
+        self.__window.addCheckableMenuItem('Settings', 'Toggle Gradient',
+                                           False, self.__eventToggleGradient)
+        self.__window.addCheckableMenuItem('Settings', 'Toggle Borders',
+                                           True, self.__eventToggleBorders)
         # Setup Help menu items
         self.__window.addMenuItem('Help', 'About', self.__eventAbout)
+
+    def __logExceptionToFile(self, exceptionTrace):
+        '''Display an error message and write the exception trace to a
+        specified log.'''
+        message = 'The application has crashed!\n\nPlease refer to ' + \
+            self.__crashLog + ' for more information!'
+        QtGui.QMessageBox.critical(self.__window, 'Error', message,
+                                   buttons=QtGui.QMessageBox.Ok)
+        debugFile = open(self.__crashLog, 'w')
+        debugFile.write(exceptionTrace)
 
     def __eventUpdateStatus(self, event):
         ''''''
         path = self.__tileframe.getHoveredNodePath(event)
         if path:
-            self.__window.setStatusBar(path.replace('\\', '/'))
+            self.__filename = path.replace('\\', '/')
+            self.__window.setStatusBar(self.__filename)
+
+    def __eventPopupMenu(self, event):
+        ''''''
+        # If mouse right click and map is created
+        if event.button() == QtCore.Qt.RightButton and \
+           self.__tileframe.isMapped():
+            menu = QtGui.QMenu()
+            # Create menu items and bind events to them
+            renameFileAction = QtGui.QAction('Rename File', self)
+            moveFileAction = QtGui.QAction('Move File', self)
+            deleteFileAction = QtGui.QAction('Delete File', self)
+            renameFileAction.triggered.connect(self.__eventMenuRenameFile)
+            moveFileAction.triggered.connect(self.__eventMenuMoveFile)
+            deleteFileAction.triggered.connect(self.__eventMenuDeleteFile)
+            # Add actions to menu and create menu
+            menu.addAction(renameFileAction)
+            menu.addAction(moveFileAction)
+            menu.addAction(deleteFileAction)
+            menu.exec_(self.__window.mapToGlobal(event.pos()))
+
+    def __getOnlyFilename(self):
+        ''''''
+        return self.__filename[self.__filename.rfind('/') + 1:]
+
+    def __getOnlyParentFolder(self):
+        ''''''
+        return self.__filename[:self.__filename.rfind('/')]
+
+    def __eventMenuRenameFile(self):
+        ''''''
+        message = 'Enter a new name for file: ' + self.__getOnlyFilename()
+        text, result = QtGui.QInputDialog.getText(self.__window, 'Message',
+                                                  message)
+        # If ok was selected and text is no empty
+        if result and text:
+            # Rename the file and remap the directory
+            newFilename = self.__getOnlyParentFolder() + '/' + text
+            try:
+                os.rename(self.__filename, newFilename)
+                self.__tileframe.updateMap(self.__mappedDir, False)
+            except:
+                # Exception raised, log and terminate the application
+                self.__logExceptionToFile(traceback.format_exc())
+                self.__window.close()
+
+    def __eventMenuMoveFile(self):
+        ''''''
+        flags = QtGui.QFileDialog.ShowDirsOnly | QtGui.QFileDialog.\
+            DontUseNativeDialog
+        folder = QtGui.QFileDialog.getExistingDirectory(None,
+                                                        'Select a folder:',
+                                                        'C:\\', flags)
+        # If a folder was selected
+        if folder:
+            # Move the file to the new destination and remap the directory
+            newFileDestination = folder + '/' + self.__getOnlyFilename()
+            try:
+                os.rename(self.__filename, newFileDestination)
+                self.__tileframe.updateMap(self.__mappedDir, False)
+            except:
+                # Exception raised, log and terminate the application
+                self.__logExceptionToFile(traceback.format_exc())
+                self.__window.close()
+
+    def __eventMenuDeleteFile(self):
+        ''''''
+        message = 'Are you sure you want to delete ' + \
+            self.__getOnlyFilename() + '?'
+        result = QtGui.QMessageBox.question(self.__window, 'Message', message,
+                                            QtGui.QMessageBox.Yes,
+                                            QtGui.QMessageBox.No)
+        if result == QtGui.QMessageBox.Yes:
+            try:
+                # Delete the file and remap the directory
+                os.remove(self.__filename)
+                self.__tileframe.updateMap(self.__mappedDir, False)
+            except:
+                # Exception raised, log and terminate the application
+                self.__logExceptionToFile(traceback.format_exc())
+                self.__window.close()
 
     def __eventToggleBorders(self):
         ''''''
@@ -77,16 +177,18 @@ class DiskmapApp(QtGui.QApplication):
 
     def __eventScreenshot(self):
         ''''''
-        filename = QtGui.QFileDialog.getSaveFileName(self.__window,
-                                                     'Save Screenshot', '',
-                                                     'Images (*.png)',
-                                                     options=QtGui.
-                                                     QFileDialog.
-                                                     DontUseNativeDialog)
-        if filename:
-            if not filename.endswith('.png'):
-                filename += '.png'
-            self.__tileframe.screenshot(filename)
+        # If a map is created
+        if self.__tileframe.isMapped():
+            filename = QtGui.QFileDialog.getSaveFileName(self.__window,
+                                                         'Save Screenshot', '',
+                                                         'Images (*.png)',
+                                                         options=QtGui.
+                                                         QFileDialog.
+                                                         DontUseNativeDialog)
+            if filename:
+                if not filename.endswith('.png'):
+                    filename += '.png'
+                self.__tileframe.screenshot(filename)
 
     def __eventMapFolder(self):
         ''''''
@@ -95,20 +197,36 @@ class DiskmapApp(QtGui.QApplication):
         folder = QtGui.QFileDialog.getExistingDirectory(None,
                                                         'Select a folder:',
                                                         'C:\\', flags)
+        # If a folder was selected
         if folder:
-            # Update the map and build the tiles
-            self.__tileframe.updateMap(folder)
+            # Store the mapped folder
+            self.__mappedDir = folder
+            try:
+                # Reset checkable menu items
+                self.__window.setCheckedMenuItem('Toggle Gradient', False)
+                self.__window.setCheckedMenuItem('Toggle Borders', True)
+                # Update the map and build the tiles
+                self.__tileframe.updateMap(folder)
+            except:
+                # Exception raised, log and terminate the application
+                self.__logExceptionToFile(traceback.format_exc())
+                self.__window.close()
             self.__window.setStatusBar('')
 
     def __eventClearMap(self):
         ''''''
-        message = "Are you sure you want to clear the visualization map?"
-        result = QtGui.QMessageBox.question(self.__window, 'Message', message,
-                                            QtGui.QMessageBox.Yes,
-                                            QtGui.QMessageBox.No)
-        if result == QtGui.QMessageBox.Yes:
-            self.__tileframe.clearMap()
-            self.__window.setStatusBar(self.__defaultStatus)
+        # If a map is created
+        if self.__tileframe.isMapped():
+            message = 'Are you sure you want to clear the visualization map?'
+            result = QtGui.QMessageBox.question(self.__window, 'Message',
+                                                message, QtGui.QMessageBox.Yes,
+                                                QtGui.QMessageBox.No)
+            if result == QtGui.QMessageBox.Yes:
+                # Reset checkable menu items
+                self.__window.setCheckedMenuItem('Toggle Gradient', False)
+                self.__window.setCheckedMenuItem('Toggle Borders', True)
+                self.__tileframe.clearMap()
+                self.__window.setStatusBar(self.__defaultStatus)
 
     def __eventAbout(self):
         '''Display an information dialog about the program languages and tools

@@ -1,3 +1,5 @@
 # Python temporary files
 *.pyc
 __pycache__
+# Crash log file
+crashLog.txt
