@@ -72,48 +72,47 @@ class TileFrame(QtGui.QFrame):
     def __drawGradientRectangle(self, painter, node, size, location):
         ''''''
         if isinstance(node, FileNode):
-            # Store a map of the file nodes and their display rectangle tiles
-            rect = QtCore.QRect(location[0], location[1], size[0], size[1])
-            self.__rectNodes.append((rect, node))
-            # Obtain the top and bottom gradient colours from node
-            topColour = node.getTColour()
-            botColour = node.getBColour()
-            colourSlope = [0, 0, 0]
-            rawColour = [0, 0, 0]
-            segColour = [0, 0, 0]
             # Obtain the components of a rectangle
             x1 = location[0]
             y1 = location[1]
-            x2 = location[0] + size[0]
-            y2 = location[1] + size[1]
-            deltaY = max(y2 - y1, 1)  # Prevent ZeroDivisionError
-            # Calculate the rate of change of each colour component
-            colourSlope[0] = round(botColour[0] - topColour[0]) / deltaY
-            colourSlope[1] = round(botColour[1] - topColour[1]) / deltaY
-            colourSlope[2] = round(botColour[2] - topColour[2]) / deltaY
-            # Use linear interpolation to calculate the colour of each line
-            for seg in range(int(y1), int(y2)):
-                for i in range(3):
-                    rawColour[i] = topColour[i] + (colourSlope[i] * (seg - y1))
-                    # Adjust the colour if < 0 or > 255
-                    segColour[i] = min(max(rawColour[i], 0), 255)
-                # Render the line segment with the segment colour
-                colour = QtGui.QColor(segColour[0], segColour[1], segColour[2])
-                painter.setPen(QtGui.QPen(colour, 1, QtCore.Qt.SolidLine))
-                painter.drawLine(x1, seg, x2, seg)
-        # Recursively render the next level of tiles
+            x2 = size[0] + 1  # The plus 1 fixes the white line issue
+            y2 = size[1] + 1  # The plus 1 fixes the white line issue
+            # Store a map of the file nodes and their display rectangle tiles
+            rect = QtCore.QRect(x1, y1, x2, y2)
+            self.__rectNodes.append((rect, node))
+            # Obtain the top and bottom gradient colours from node
+            topCol = node.getTColour()
+            botCol = node.getBColour()
+            # Obtain the components of rectanglular gradient
+            gradX1 = location[0]
+            gradY1 = location[1] + size[0]
+            gradX2 = (location[0] + size[0]) - size[0]
+            gradY2 = location[1] + size[1]
+            # Render the tile as a gradient
+            grad = QtGui.QLinearGradient(gradX1, gradY1, gradX2, gradY2)
+            grad.setColorAt(0.0, QtGui.QColor(topCol[0], topCol[1], topCol[2]))
+            grad.setColorAt(1.0, QtGui.QColor(botCol[0], botCol[1], botCol[2]))
+            painter.setPen(QtCore.Qt.NoPen)
+            painter.setBrush(QtGui.QBrush(grad))
+            painter.drawRect(rect)
+        # Recursively render the next tile in the Treemap
         self.__buildTiles(painter, node, size, location[:])
 
     def __drawRectangle(self, painter, node, size, location):
         ''''''
         if isinstance(node, FileNode):
+            # Obtain the components of a rectangle
+            x1 = location[0]
+            x2 = location[1]
+            y1 = size[0] + 1  # The plus 1 fixes the white line issue
+            y2 = size[1] + 1  # The plus 1 fixes the white line issue
             # Store a map of the file nodes and their display rectangle tiles
-            rect = QtCore.QRect(location[0], location[1], size[0], size[1])
+            rect = QtCore.QRect(x1, x2, y1, y2)
             self.__rectNodes.append((rect, node))
             # Obtain the file's colour and render the tile
-            rgb = node.getTColour()
-            painter.fillRect(rect, QtGui.QColor(rgb[0], rgb[1], rgb[2]))
-        # Recursively render the next level of tiles
+            col = node.getTColour()
+            painter.fillRect(rect, QtGui.QColor(col[0], col[1], col[2]))
+        # Recursively render the next tile in the Treemap
         self.__buildTiles(painter, node, size, location[:])
 
     def getHoveredNodePath(self, mousePos):

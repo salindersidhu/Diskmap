@@ -3,17 +3,6 @@
 ##Description:
 A disk space visualization utility. This program displays all the files and folders within a selected location as a rectangle map where each rectangle is proportional to the size of the file it represents.
 
-##To Do Tasks:
-- [X] Add right click popup menu with options to rename, move and delete files
-- [X] Add the name of the file mouse hovered to the status bar
-- [ ] Visually show hovered files as lighter colour
-- [X] Add settings and option for gradients
-- [X] Add settings and option for borders
-- [ ] Fix bugs with rendering and file hovered indicator
-- [X] Refactor Node system
-- [X] Add Crash log
-- [ ] Finish documentation
-
 ##Features:
 - Graphical visualization of files and folders
 - Rename files in the visualizer
