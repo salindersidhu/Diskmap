@@ -30,14 +30,6 @@ class FileNode(Node):
         self.bColour = tuple(i * 255 for i in hsv_to_rgb(hue, 1, 0.95))
         self.hColour = tuple(i * 255 for i in hsv_to_rgb(hue, 0.3, 0.95))
 
-    def __getRandomColour(self, sat, val):
-        '''Return a random colour in the form of an RGB 3-tupple based on a
-        random hue and specified saturation and value parameters.'''
-        hue = random.randint(0, 360) / 360
-        sat /= 100
-        val /= 100
-        return tuple(i * 255 for i in colorsys.hsv_to_rgb(hue, sat, val))
-
     def getPath(self):
         '''Return the path of the FileNode self.'''
         return self.path

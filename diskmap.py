@@ -16,7 +16,7 @@ class DiskmapApp(QtGui.QApplication):
         self.__defaultStatus = "Please open a folder to map..."
         self.__debugLog = 'debugLog.txt'
         # Configure the GUIWindow
-        self.__window = GUIWindow('Diskap - Disk Visualization Utility', 640,
+        self.__window = GUIWindow('Diskmap - Disk Visualization Utility', 640,
                                   360, 'Resources/icon.png')
         # Configure the Tileframe
         self.__tileframe = TileFrame(self.__window)
