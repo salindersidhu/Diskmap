@@ -63,10 +63,9 @@ class DiskmapApp(QtGui.QApplication):
 
     def __eventUpdateStatus(self, event):
         ''''''
-        node = self.__tileframe.getHoveredNode(event)
-        if node:
-            path = node.key.path.replace('\\','/')
-            self.__window.setStatusBar(path)
+        path = self.__tileframe.getHoveredNodePath(event)
+        if path:
+            self.__window.setStatusBar(path.replace('\\', '/'))
 
     def __eventToggleBorders(self):
         ''''''

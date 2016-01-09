@@ -1,5 +1,6 @@
-from PyQt4 import QtGui, QtCore
 from treemap import Treemap
+from filenode import FileNode
+from PyQt4 import QtGui, QtCore
 
 
 class TileFrame(QtGui.QFrame):
@@ -32,22 +33,34 @@ class TileFrame(QtGui.QFrame):
             location[1] += 1
             size[0] -= 2
             size[1] -= 2
-        totalSize = max(float(node.key.size), 1)  # Prevent ZeroDivisionError
-        for item in node.children:
-            percent = item.key.size / totalSize
+        totalSize = max(node.getSize(), 1)  # Prevent ZeroDivisionError
+        for item in node.getChildren():
+            percent = item.getSize() / totalSize
             itemArea = (size[0] * size[1]) * percent
             # Calculate dimensions of the rectangle
             if size[1] > size[0]:
                 width = size[0]
                 height = itemArea / width
                 # Draw rectangle
-                self.__drawRectangle(painter, item, [width, height], location)
+                if self.__isGradient:
+                    self.__drawGradientRectangle(painter, item, [width,
+                                                                 height],
+                                                 location)
+                else:
+                    self.__drawRectangle(painter, item, [width, height],
+                                         location)
                 location[1] += height
             else:
                 height = size[1]
                 width = itemArea / height
                 # Draw rectangle
-                self.__drawRectangle(painter, item, [width, height], location)
+                if self.__isGradient:
+                    self.__drawGradientRectangle(painter, item, [width,
+                                                                 height],
+                                                 location)
+                else:
+                    self.__drawRectangle(painter, item, [width, height],
+                                         location)
                 location[0] += width
         # If rendering borders is enabled
         if self.__isBorders:
@@ -56,20 +69,25 @@ class TileFrame(QtGui.QFrame):
             painter.setPen(self.__borderCol)
             painter.drawRect(borderRect)
 
+    def __drawGradientRectangle(self, painter, node, size, location):
+        ''''''
+        # Recursively render the next level of tiles
+        self.__buildTiles(painter, node, size, location[:])
+
     def __drawRectangle(self, painter, node, size, location):
         ''''''
-        # If the node is associated with a colour
-        if node.key.colour:
+        # If the node is a FileNode
+        if isinstance(node, FileNode):
             rect = QtCore.QRect(location[0], location[1], size[0], size[1])
             # Store a map of the file nodes and their display rectangle tiles
             self.__rectNodes.append((rect, node))
             # Obtain the file's colour and render the tile
-            rgb = node.key.colour
+            rgb = node.getTColour()
             painter.fillRect(rect, QtGui.QColor(rgb[0], rgb[1], rgb[2]))
         # Recursively render the next level of tiles
         self.__buildTiles(painter, node, size, location[:])
 
-    def getHoveredNode(self, mousePos):
+    def getHoveredNodePath(self, mousePos):
         ''''''
         mX = mousePos.x()
         mY = mousePos.y()
@@ -81,7 +99,7 @@ class TileFrame(QtGui.QFrame):
             rH = item[0].height()
             if (mX >= rX and mX <= (rX + rW)) and (mY >= rY and mY <= (rY +
                                                                        rH)):
-                return item[1]
+                return item[1].getPath()
 
     def toggleBorders(self):
         ''''''

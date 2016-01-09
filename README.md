@@ -9,6 +9,8 @@ A disk space visualization utility. This program displays all the files and fold
 - [ ] Visually show hovered files as lighter colour
 - [ ] Add settings and option for gradients
 - [X] Add settings and option for borders
+- [ ] Fix bugs with rendering and file hovered indicator
+- [X] Refactor Node system
 - [ ] Finish documentation
 
 ##Features:
