@@ -7,7 +7,7 @@ A disk space visualization utility. This program displays all the files and fold
 - [ ] Add right click popup menu with options to view info, move, rename, delete and map the folder of a file
 - [X] Add the name of the file mouse hovered to the status bar
 - [ ] Visually show hovered files as lighter colour
-- [ ] Add settings and option for gradients
+- [X] Add settings and option for gradients
 - [X] Add settings and option for borders
 - [ ] Fix bugs with rendering and file hovered indicator
 - [X] Refactor Node system
@@ -29,7 +29,6 @@ A disk space visualization utility. This program displays all the files and fold
 - `PyQt 4` [(Build 4.11)](https://riverbankcomputing.com/software/pyqt/download)
 
 ##Running the Visualizer:
-
 ###Windows:
 1. Clone the repo to obtain the source code
 2. Download and install `Python3`

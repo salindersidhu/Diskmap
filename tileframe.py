@@ -71,15 +71,44 @@ class TileFrame(QtGui.QFrame):
 
     def __drawGradientRectangle(self, painter, node, size, location):
         ''''''
+        if isinstance(node, FileNode):
+            # Store a map of the file nodes and their display rectangle tiles
+            rect = QtCore.QRect(location[0], location[1], size[0], size[1])
+            self.__rectNodes.append((rect, node))
+            # Obtain the top and bottom gradient colours from node
+            topColour = node.getTColour()
+            botColour = node.getBColour()
+            colourSlope = [0, 0, 0]
+            rawColour = [0, 0, 0]
+            segColour = [0, 0, 0]
+            # Obtain the components of a rectangle
+            x1 = location[0]
+            y1 = location[1]
+            x2 = location[0] + size[0]
+            y2 = location[1] + size[1]
+            deltaY = max(y2 - y1, 1)  # Prevent ZeroDivisionError
+            # Calculate the rate of change of each colour component
+            colourSlope[0] = round(botColour[0] - topColour[0]) / deltaY
+            colourSlope[1] = round(botColour[1] - topColour[1]) / deltaY
+            colourSlope[2] = round(botColour[2] - topColour[2]) / deltaY
+            # Use linear interpolation to calculate the colour of each line
+            for seg in range(int(y1), int(y2)):
+                for i in range(3):
+                    rawColour[i] = topColour[i] + (colourSlope[i] * (seg - y1))
+                    # Adjust the colour if < 0 or > 255
+                    segColour[i] = min(max(rawColour[i], 0), 255)
+                # Render the line segment with the segment colour
+                colour = QtGui.QColor(segColour[0], segColour[1], segColour[2])
+                painter.setPen(QtGui.QPen(colour, 1, QtCore.Qt.SolidLine))
+                painter.drawLine(x1, seg, x2, seg)
         # Recursively render the next level of tiles
         self.__buildTiles(painter, node, size, location[:])
 
     def __drawRectangle(self, painter, node, size, location):
         ''''''
-        # If the node is a FileNode
         if isinstance(node, FileNode):
-            rect = QtCore.QRect(location[0], location[1], size[0], size[1])
             # Store a map of the file nodes and their display rectangle tiles
+            rect = QtCore.QRect(location[0], location[1], size[0], size[1])
             self.__rectNodes.append((rect, node))
             # Obtain the file's colour and render the tile
             rgb = node.getTColour()
