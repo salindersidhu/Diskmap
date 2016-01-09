@@ -118,7 +118,7 @@ class TileFrame(QtGui.QFrame):
     def getHoveredNodePath(self, mousePos):
         ''''''
         mX = mousePos.x()
-        mY = mousePos.y()
+        mY = mousePos.y() - self.y()  # Account for location of widget
         # Iterate through all the rectangles
         for item in self.__rectNodes:
             rX = item[0].x()
