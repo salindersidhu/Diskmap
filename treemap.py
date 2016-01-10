@@ -3,8 +3,10 @@ from dirnode import DirNode
 from filenode import FileNode
 
 
-class Treemap(object):
-    '''A Treemap class.'''
+class Treemap:
+    '''The Treemap data structure creates a map of all the files and folders
+    within a location in the form of a tree with n number of children. The
+    subtrees are directories and the leaves are files.'''
 
     def __init__(self):
         '''Create a new Treemap with an empty root Node.'''

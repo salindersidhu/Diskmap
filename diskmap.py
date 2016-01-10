@@ -7,10 +7,13 @@ from tileframe import TileFrame
 
 
 class DiskmapApp(QtGui.QApplication):
-    ''''''
+    '''DiskmapApp extends the QtGui.QApplication class. This class creates the
+    GUI for the Diskmap application and provides functions for all of the
+    application's events. It uses TileFrame and GUIWindow to create a window,
+    menu, status bar and the frame where the Treemap tiles are rendered.'''
 
     def __init__(self, args):
-        '''Create a new DiskmapApp with arguments specified by arg.'''
+        '''Create a new DiskmapApp with arguments specified by args.'''
         super(DiskmapApp, self).__init__(args)
         # Application variables
         self.__FPS = 60
@@ -41,7 +44,8 @@ class DiskmapApp(QtGui.QApplication):
         self.__window.addMenu('Help')
 
     def __setupMouseEvents(self):
-        ''''''
+        '''Bind event functions for mouse movement, mouse click and mouse
+        release events to GUIWindow.'''
         moveEvents = []
         clickEvents = []
         releaseEvents = []
@@ -81,7 +85,10 @@ class DiskmapApp(QtGui.QApplication):
         debugFile.write(exceptionTrace)
 
     def __eventUpdateStatus(self, event):
-        ''''''
+        '''Set the status bar text to the file path of the currently mouse
+        hovered FileNode from the TileFrame. Set the mouse cursor to a hand
+        pointer if a path exists, set the mouse cursor to the standard
+        arrow otherwise.'''
         path = self.__tileframe.getHoveredNodePath(event)
         if path:
             # Set the cursor to pointing hand cursor
@@ -94,7 +101,9 @@ class DiskmapApp(QtGui.QApplication):
             self.setOverrideCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
 
     def __eventPopupMenu(self, event):
-        ''''''
+        '''Create a popup menu iff a visualization map exists and the right
+        mouse click event occured. The popup menu contains options to rename,
+        move and delete the currently selected file.'''
         # If mouse right click and map is created
         if event.button() == QtCore.Qt.RightButton and \
            self.__tileframe.isMapped():
@@ -113,15 +122,17 @@ class DiskmapApp(QtGui.QApplication):
             menu.exec_(self.__window.mapToGlobal(event.pos()))
 
     def __getOnlyFilename(self):
-        ''''''
+        '''Return the name of the file, as a string, from the file's full
+        path.'''
         return self.__filename[self.__filename.rfind('/') + 1:]
 
     def __getOnlyParentFolder(self):
-        ''''''
+        '''Return the path of the file up to the parent directory, as a string,
+        from the file's full path.'''
         return self.__filename[:self.__filename.rfind('/')]
 
     def __eventMenuRenameFile(self):
-        ''''''
+        '''Rename a selected file to a new specified name.'''
         message = 'Enter a new name for file: ' + self.__getOnlyFilename()
         text, result = QtGui.QInputDialog.getText(self.__window, 'Message',
                                                   message)
@@ -138,7 +149,7 @@ class DiskmapApp(QtGui.QApplication):
                 self.__window.close()
 
     def __eventMenuMoveFile(self):
-        ''''''
+        '''Move a selected file to a new specified folder.'''
         flags = QtGui.QFileDialog.ShowDirsOnly | QtGui.QFileDialog.\
             DontUseNativeDialog
         folder = QtGui.QFileDialog.getExistingDirectory(None,
@@ -157,7 +168,7 @@ class DiskmapApp(QtGui.QApplication):
                 self.__window.close()
 
     def __eventMenuDeleteFile(self):
-        ''''''
+        '''Delete a selected file.'''
         message = 'Are you sure you want to delete ' + \
             self.__getOnlyFilename() + '?'
         result = QtGui.QMessageBox.question(self.__window, 'Message', message,
@@ -174,15 +185,16 @@ class DiskmapApp(QtGui.QApplication):
                 self.__window.close()
 
     def __eventToggleBorders(self):
-        ''''''
+        '''Toggle rendering borders in the TileFrame.'''
         self.__tileframe.toggleBorders()
 
     def __eventToggleGradient(self):
-        ''''''
+        '''Toggle rendering gradients in the TileFrame.'''
         self.__tileframe.toggleGradient()
 
     def __eventScreenshot(self):
-        ''''''
+        '''Prompt the user to save a screenshot of the visualization map and
+        save the screenshot as a .PNG file.'''
         # If a map is created
         if self.__tileframe.isMapped():
             filename = QtGui.QFileDialog.getSaveFileName(self.__window,
@@ -197,7 +209,9 @@ class DiskmapApp(QtGui.QApplication):
                 self.__tileframe.screenshot(filename)
 
     def __eventMapFolder(self):
-        ''''''
+        '''Prompt the user to select a folder to use for creating the
+        visualization map. Build the visualization if the user has selected a
+        valid folder.'''
         flags = QtGui.QFileDialog.ShowDirsOnly | QtGui.QFileDialog.\
             DontUseNativeDialog
         folder = QtGui.QFileDialog.getExistingDirectory(None,
@@ -220,7 +234,9 @@ class DiskmapApp(QtGui.QApplication):
             self.__window.setStatusBar('')
 
     def __eventClearMap(self):
-        ''''''
+        '''Prompt the user to clear the visualization map. Clear the map, reset
+        the checkable menu items and set the default status text iff the user
+        confirmed Yes to the message prompt.'''
         # If a map is created
         if self.__tileframe.isMapped():
             message = 'Are you sure you want to clear the visualization map?'

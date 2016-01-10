@@ -4,10 +4,13 @@ from PyQt4 import QtGui, QtCore
 
 
 class TileFrame(QtGui.QFrame):
-    ''''''
+    '''TileFrame extends the QtGui.QFrame class. It is used to render the
+    Treemap data structure, each node in the Treemap is rendered as
+    rectanglular tiles with a fixed colour or gradient colours. Hovered tiles
+    are rendered using a lighter fixed colour.'''
 
     def __init__(self, parentWindow):
-        ''''''
+        '''Create a new TileFrame.'''
         super(TileFrame, self).__init__(parentWindow)
         # TileFrame variables
         self.__treemap = None
@@ -25,7 +28,10 @@ class TileFrame(QtGui.QFrame):
         self.setMouseTracking(True)
 
     def __buildTiles(self, painter, node, size, location):
-        ''''''
+        '''Render the Treemap Node by Node. Render the DirNode as borders
+        with the border colour and render the FileNodes as rectangular tiles.
+        Render the FileNodes with gradient colours iff gradients are enabled
+        and render with a fixed colour otherwise.'''
         borderRect = QtCore.QRect(location[0], location[1], size[0], size[1])
         # If rendering borders is enabled
         if self.__isBorders:
@@ -71,13 +77,16 @@ class TileFrame(QtGui.QFrame):
             painter.drawRect(borderRect)
 
     def __drawGradientRectangle(self, painter, node, size, location):
-        ''''''
+        '''Render a Node of type FileNode as a rectangular gradient
+        proportional to the size of the file represented by FileNode. Render
+        the FileNode with its hover colour iff it's mouse hovered, otherwise
+        render the FileNode with the top and bottom gradient colours.'''
         if isinstance(node, FileNode):
             # Obtain the components of a rectangle
             x1 = location[0]
             y1 = location[1]
-            x2 = size[0] + 1  # The plus 1 fixes the white line issue
-            y2 = size[1] + 1  # The plus 1 fixes the white line issue
+            x2 = size[0] + 1
+            y2 = size[1] + 1
             # Store a map of the file nodes and their display rectangle tiles
             rect = QtCore.QRect(x1, y1, x2, y2)
             self.__rectNodes.append((rect, node))
@@ -105,13 +114,16 @@ class TileFrame(QtGui.QFrame):
         self.__buildTiles(painter, node, size, location[:])
 
     def __drawRectangle(self, painter, node, size, location):
-        ''''''
+        '''Render a Node of type FileNode as a rectangular tile proportional to
+        the size of file represented by the FileNode. Render the FileNode with
+        its hover colour iff it's mouse hovered, otherwise render the FileNode
+        with the top gradient colour.'''
         if isinstance(node, FileNode):
             # Obtain the components of a rectangle
             x1 = location[0]
             x2 = location[1]
-            y1 = size[0] + 1  # The plus 1 fixes the white line issue
-            y2 = size[1] + 1  # The plus 1 fixes the white line issue
+            y1 = size[0] + 1
+            y2 = size[1] + 1
             # Store a map of the file nodes and their display rectangle tiles
             rect = QtCore.QRect(x1, x2, y1, y2)
             self.__rectNodes.append((rect, node))
@@ -126,7 +138,8 @@ class TileFrame(QtGui.QFrame):
         self.__buildTiles(painter, node, size, location[:])
 
     def getHoveredNodePath(self, mousePos):
-        ''''''
+        '''Return the path of a file, as a string, from a Node that is mouse
+        hovered.'''
         mX = mousePos.x()
         mY = mousePos.y() - self.y()  # Account for location of widget
         # Iterate through all the rectangles
@@ -144,29 +157,32 @@ class TileFrame(QtGui.QFrame):
                 return item[1].getPath()
 
     def isMapped(self):
-        ''''''
+        '''Return true if Treemap exists, False otherwise.'''
         return self.__treemap
 
     def toggleBorders(self):
-        ''''''
+        '''Enable drawing of borders if drawing borders was dissabled and
+        dissable drawing of borders if it was previously enabled.'''
         if self.isMapped():
             # Toggle borders and update the tile rendering
             self.__isBorders = not self.__isBorders
             self.update()
 
     def toggleGradient(self):
-        ''''''
+        '''Enable drawing of gradients if drawing gradients was dissabled and
+        dissable drawing of gradients if they were previously enabled.'''
         if self.isMapped():
             # Toggle gradient and update the tile rendering
             self.__isGradient = not self.__isGradient
             self.update()
 
     def screenshot(self, filename):
-        ''''''
+        '''Obtain a pixel map of the current window and save it as a .PNG
+        file with the name specified by filename.'''
         QtGui.QPixmap.grabWindow(self.winId()).save(filename, 'png')
 
     def clearMap(self):
-        ''''''
+        '''Reset the visual map variables and clear the Treemap.'''
         # Reset the toggle variables
         self.__isBorders = True
         self.__isGradient = False
@@ -176,7 +192,8 @@ class TileFrame(QtGui.QFrame):
         self.__treemap = None
 
     def updateMap(self, directory, resetMap=True):
-        ''''''
+        '''Rebuild the Treemap at the specified directory and clear the map
+        iff resetMap is True.'''
         # Clear the map if reset is True
         if resetMap:
             self.clearMap()
@@ -185,10 +202,12 @@ class TileFrame(QtGui.QFrame):
         self.__treemap.build(directory)
 
     def paintEvent(self, event):
-        ''''''
+        '''Handle and process all of the drawing for the Treemap. Render the
+        Treemap if it's loaded, otherwise render a grey background with darker
+        grey text centered on the window.'''
         self.__rectNodes = []  # Clear all the rectangle node list
         painter = QtGui.QPainter(self)  # Used to draw on the frame
-        # Clear all drawings on the GridFrame
+        # Clear all drawings on the TileFrame
         painter.eraseRect(0, 0, self.width(), self.height())
         if self.isMapped():
             # Set the initial conditions and render the Treemap
