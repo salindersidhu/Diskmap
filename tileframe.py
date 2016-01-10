@@ -14,6 +14,7 @@ class TileFrame(QtGui.QFrame):
         self.__isBorders = True
         self.__isGradient = False
         self.__rectNodes = []
+        self.__selectedNode = None
         self.__borderCol = QtGui.QColor(0, 0, 0)
         self.__bgCol = QtGui.QColor(64, 64, 64)
         self.__txtCol = QtGui.QColor(38, 38, 38)
@@ -80,9 +81,14 @@ class TileFrame(QtGui.QFrame):
             # Store a map of the file nodes and their display rectangle tiles
             rect = QtCore.QRect(x1, y1, x2, y2)
             self.__rectNodes.append((rect, node))
-            # Obtain the top and bottom gradient colours from node
-            topCol = node.getTColour()
-            botCol = node.getBColour()
+            # Set the top and bottom gradient colours to the Node's hover
+            # colours if the file's node is selected, otherwise obtain the top
+            # and bottom gradient colours from node
+            if self.__selectedNode == node:
+                topCol = botCol = node.getHColour()
+            else:
+                topCol = node.getTColour()
+                botCol = node.getBColour()
             # Obtain the components of rectanglular gradient
             gradX1 = location[0]
             gradY1 = location[1] + size[0]
@@ -109,8 +115,12 @@ class TileFrame(QtGui.QFrame):
             # Store a map of the file nodes and their display rectangle tiles
             rect = QtCore.QRect(x1, x2, y1, y2)
             self.__rectNodes.append((rect, node))
-            # Obtain the file's colour and render the tile
-            col = node.getTColour()
+            # Obtain the file's hover colour if it is selected otherwise obtain
+            # it's regular top gradient colour
+            if self.__selectedNode == node:
+                col = node.getHColour()
+            else:
+                col = node.getTColour()
             painter.fillRect(rect, QtGui.QColor(col[0], col[1], col[2]))
         # Recursively render the next tile in the Treemap
         self.__buildTiles(painter, node, size, location[:])
@@ -127,6 +137,10 @@ class TileFrame(QtGui.QFrame):
             rH = item[0].height()
             if (mX >= rX and mX <= (rX + rW)) and (mY >= rY and mY <= (rY +
                                                                        rH)):
+                # Store the hovered node as the selected node and update
+                self.__selectedNode = item[1]
+                self.update()
+                # Return the path of the file represented by the FileNode
                 return item[1].getPath()
 
     def isMapped(self):

@@ -84,8 +84,14 @@ class DiskmapApp(QtGui.QApplication):
         ''''''
         path = self.__tileframe.getHoveredNodePath(event)
         if path:
+            # Set the cursor to pointing hand cursor
+            self.setOverrideCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+            # Replace the backslash with forward slash in the file path
             self.__filename = path.replace('\\', '/')
             self.__window.setStatusBar(self.__filename)
+        else:
+            # Restore cursor back to arrow cursor
+            self.setOverrideCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
 
     def __eventPopupMenu(self, event):
         ''''''

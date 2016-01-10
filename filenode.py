@@ -28,7 +28,7 @@ class FileNode(Node):
         hue = randint(0, 360) / 360
         self.tColour = tuple(i * 255 for i in hsv_to_rgb(hue, 0.6, 0.95))
         self.bColour = tuple(i * 255 for i in hsv_to_rgb(hue, 1, 0.95))
-        self.hColour = tuple(i * 255 for i in hsv_to_rgb(hue, 0.3, 0.95))
+        self.hColour = tuple(i * 255 for i in hsv_to_rgb(hue, 0.05, 0.95))
 
     def getPath(self):
         '''Return the path of the FileNode self.'''
