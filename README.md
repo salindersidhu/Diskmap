@@ -1,7 +1,7 @@
-#Diskmap
+# Diskmap
 
-##Description:
-A disk space visualization utility. This program displays all the files and folders within a selected location as a rectangular map where each rectangle is proportional to the size of the file it represents. Each rectangular tile on the map is selectable; to select it simply hover over the tile with your mouse. Right click on a selected tile to bring up a popup menu containing options to rename, move and delete the selected file. The window can be resized for optimal viewing, it is recommend to use the application in fullscreen mode.
+## Description:
+Diskmap is a hard drive space visualization utility. This program displays all the files and folders within a selected location as a rectangular map where each rectangle is proportional to the size of the file it represents. Each rectangular tile on the map is selectable; to select it simply hover over the tile with your mouse. Right click on a selected tile to bring up a popup menu containing options to rename, move and delete the selected file. For optimal viewing, it is recommend to use the application in full screen mode.
 
 <p align="center">
 	<img src="http://i1379.photobucket.com/albums/ah129/SalinderSid/screenshot1_zpskvquake8.png" alt="Screenshot1"/>
@@ -12,43 +12,32 @@ A disk space visualization utility. This program displays all the files and fold
 	<img src="http://i1379.photobucket.com/albums/ah129/SalinderSid/screenshot4_zpsw7a5vkdx.png" alt="Screenshot4"/>
 </p>
 
-##Features:
+## Features:
 - Graphical visualization of files and folders
 - Rename files in the visualizer
 - Move files in the visualizer
 - Delete files in the visualizer
 - Save screenshots of the visualization
 
-##Supports:
-- Microsoft Windows 7, 8, 8.1, 10
-- Linux and Unix based distributions
+## Supports:
+- Microsoft Windows 7, 8, 8.1 and 10
+- Linux based distributions
+- Mac OS X
 
-##Dependencies:
-- `Python 3` [(Build 3.4)](https://www.python.org/downloads/)
-- `PyQt 4` [(Build 4.11)](https://riverbankcomputing.com/software/pyqt/download)
+## Dependencies:
+- Python 3 [(Build 3.4)](https://www.python.org/downloads/)
+- PyQt 4 [(Build 4.11)](https://riverbankcomputing.com/software/pyqt/download)
 
-##Running the Visualizer:
-###Windows:
-1. Clone the repo to obtain the source code
-2. Download and install `Python3`
-3. Download and install `PyQt 4`
-4. Open a `command prompt` and navigate to the cloned repo's directory using the `cd` command
-5. Run the following command, `python diskmap.py` to launch the Visualizer
+## Running the Visualizer:
+1. Download and install Python 3
++ Download and install PyQt 4
++ To launch the visualizer, open a terminal or command prompt and type `python3 diskmap.py`
 
-###Linux:
-1. Clone the repo to obtain the source code
-2. If needed, install python3 by running the command `sudo apt-get install python3` from the terminal
-3. To install PyQt 4 run the following command from the terminal `sudo apt-get install python3-pyqt4`
-4. Navigate to the cloned repo's directory from the terminal using the `cd` command
-5. Run the following command from the terminal, `python3 diskmap.py` to launch the Visualizer
+## Troubleshooting:
+Please refer to the [Wiki section](https://github.com/SalinderSidhu/Diskmap/wiki) for troubleshooting.
 
-##Troubleshooting:
-This application is cross platform compatible with most operating systems (Windows, Linux and Mac). If the application crashes, a log is generated in the application's directory. This log contains error and exception details on why the application crashed. Please refer to the known issues below when reading the crash log.
-####PermissionError: [WinError 5] Access is denied:
-This occurs when you do not have permission on your user account to read files and folders on a Windows operating system. Windows, by default, is known to restrict access to specific protected files. This issue can be resolved by running `Diskmap` as an Administrator.
-
-##License:
-Copyright (c) 2016 Salinder Sidhu
+## License:
+Copyright &copy; 2016 Salinder Sidhu
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

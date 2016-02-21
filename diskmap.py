@@ -1,6 +1,5 @@
 import os
 import sys
-import traceback
 from PyQt4 import QtGui, QtCore
 from guiwindow import GUIWindow
 from tileframe import TileFrame
@@ -18,7 +17,6 @@ class DiskmapApp(QtGui.QApplication):
         # Application variables
         self.__FPS = 60
         self.__defaultStatus = "Please open a folder to map..."
-        self.__crashLog = 'crashLog.txt'
         self.__mappedDir = ''
         self.__currentFile = ''
         # Configure the GUIWindow
@@ -74,15 +72,12 @@ class DiskmapApp(QtGui.QApplication):
         # Setup Help menu items
         self.__window.addMenuItem('Help', 'About', self.__eventAbout)
 
-    def __logExceptionToFile(self, exceptionTrace):
-        '''Display an error message and write the exception trace to a
-        specified log.'''
-        message = 'The application has crashed!\n\nPlease refer to ' + \
-            self.__crashLog + ' for more information!'
+    def __showException(self, exception):
+        '''Show a popup message box with the exception that occured.'''
+        message = 'The application has crashed!\n\nERROR: ' + \
+            exception.split(':')[0]
         QtGui.QMessageBox.critical(self.__window, 'Error', message,
                                    buttons=QtGui.QMessageBox.Ok)
-        debugFile = open(self.__crashLog, 'w')
-        debugFile.write(exceptionTrace)
 
     def __eventUpdateStatus(self, event):
         '''Set the status bar text to the file path of the currently mouse
@@ -144,8 +139,8 @@ class DiskmapApp(QtGui.QApplication):
                 os.rename(self.__filename, newFilename)
                 self.__tileframe.updateMap(self.__mappedDir, False)
             except:
-                # Exception raised, log and terminate the application
-                self.__logExceptionToFile(traceback.format_exc())
+                # Exception raised, display message and terminate
+                self.__showException(str(sys.exc_info()[1]))
                 self.__window.close()
 
     def __eventMenuMoveFile(self):
@@ -163,8 +158,8 @@ class DiskmapApp(QtGui.QApplication):
                 os.rename(self.__filename, newFileDestination)
                 self.__tileframe.updateMap(self.__mappedDir, False)
             except:
-                # Exception raised, log and terminate the application
-                self.__logExceptionToFile(traceback.format_exc())
+                # Exception raised, display message and terminate
+                self.__showException(str(sys.exc_info()[1]))
                 self.__window.close()
 
     def __eventMenuDeleteFile(self):
@@ -180,8 +175,8 @@ class DiskmapApp(QtGui.QApplication):
                 os.remove(self.__filename)
                 self.__tileframe.updateMap(self.__mappedDir, False)
             except:
-                # Exception raised, log and terminate the application
-                self.__logExceptionToFile(traceback.format_exc())
+                # Exception raised, display message and terminate
+                self.__showException(str(sys.exc_info()[1]))
                 self.__window.close()
 
     def __eventToggleBorders(self):
@@ -228,8 +223,8 @@ class DiskmapApp(QtGui.QApplication):
                 # Update the map and build the tiles
                 self.__tileframe.updateMap(folder)
             except:
-                # Exception raised, log and terminate the application
-                self.__logExceptionToFile(traceback.format_exc())
+                # Exception raised, display message and terminate
+                self.__showException(str(sys.exc_info()[1]))
                 self.__window.close()
             self.__window.setStatusBar('')
 
