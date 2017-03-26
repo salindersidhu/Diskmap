@@ -37,4 +37,4 @@ Diskmap is a hard drive space visualization utility. This program displays all t
 Please refer to the [Wiki section](https://github.com/SalinderSidhu/Diskmap/wiki) for troubleshooting.
 
 ## License:
-MIT
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](/LICENSE.md)
