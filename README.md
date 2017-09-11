@@ -4,12 +4,12 @@
 Diskmap is a hard drive space visualization utility. This program displays all the files and folders within a selected location as a rectangular map where each rectangle is proportional to the size of the file it represents. Each rectangular tile on the map is selectable; to select it simply hover over the tile with your mouse. Right click on a selected tile to bring up a popup menu containing options to rename, move and delete the selected file. For optimal viewing, it is recommend to use the application in full screen mode.
 
 <p align="center">
-	<img src="http://i1379.photobucket.com/albums/ah129/SalinderSid/screenshot1_zpskvquake8.png" alt="Screenshot1"/>
-	<img src="http://i1379.photobucket.com/albums/ah129/SalinderSid/screenshot2_zpsl4nykbty.png" alt="Screenshot2"/>
+	<img src="screenshot1.png" alt="Screenshot1"/>
+	<img src="screenshot2.png" alt="Screenshot2"/>
 </p>
 <p align="center">
-	<img src="http://i1379.photobucket.com/albums/ah129/SalinderSid/screenshot3_zpsooobtszu.png" alt="Screenshot3"/>
-	<img src="http://i1379.photobucket.com/albums/ah129/SalinderSid/screenshot4_zpsw7a5vkdx.png" alt="Screenshot4"/>
+	<img src="screenshot3.png" alt="Screenshot3"/>
+	<img src="screenshot4.png" alt="Screenshot4"/>
 </p>
 
 ## Features:
