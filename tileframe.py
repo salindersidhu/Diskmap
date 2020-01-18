@@ -1,9 +1,9 @@
 from treemap import Treemap
 from filenode import FileNode
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtGui, QtCore, QtWidgets
 
 
-class TileFrame(QtGui.QFrame):
+class TileFrame(QtWidgets.QFrame):
     '''TileFrame extends the QtGui.QFrame class. It is used to render the
     Treemap data structure, each node in the Treemap is rendered as
     rectanglular tiles with a fixed colour or gradient colours. Hovered tiles
@@ -50,11 +50,14 @@ class TileFrame(QtGui.QFrame):
                 height = itemArea / width
                 # Draw rectangle
                 if self.__isGradient:
-                    self.__drawGradientRectangle(painter, item, [width,
-                                                                 height],
+                    self.__drawGradientRectangle(painter,
+                                                 item,
+                                                 [width, height],
                                                  location)
                 else:
-                    self.__drawRectangle(painter, item, [width, height],
+                    self.__drawRectangle(painter,
+                                         item,
+                                         [width, height],
                                          location)
                 location[1] += height
             else:
@@ -62,11 +65,14 @@ class TileFrame(QtGui.QFrame):
                 width = itemArea / height
                 # Draw rectangle
                 if self.__isGradient:
-                    self.__drawGradientRectangle(painter, item, [width,
-                                                                 height],
+                    self.__drawGradientRectangle(painter,
+                                                 item,
+                                                 [width, height],
                                                  location)
                 else:
-                    self.__drawRectangle(painter, item, [width, height],
+                    self.__drawRectangle(painter,
+                                         item,
+                                         [width, height],
                                          location)
                 location[0] += width
         # If rendering borders is enabled
@@ -213,7 +219,9 @@ class TileFrame(QtGui.QFrame):
             # Set the initial conditions and render the Treemap
             size = [self.width(), self.height()]
             location = [0, 0]
-            self.__buildTiles(painter, self.__treemap.getRoot(), size,
+            self.__buildTiles(painter,
+                              self.__treemap.getRoot(),
+                              size,
                               location)
         else:
             # Draw the default background

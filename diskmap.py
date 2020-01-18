@@ -1,13 +1,13 @@
 import os
 import sys
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtGui, QtCore, QtWidgets
 from guiwindow import GUIWindow
 from tileframe import TileFrame
 
 
-class DiskmapApp(QtGui.QApplication):
-    '''DiskmapApp extends the QtGui.QApplication class. This class creates the
-    GUI for the Diskmap application and provides functions for all of the
+class DiskmapApp(QtWidgets.QApplication):
+    '''DiskmapApp extends the QtWidgets.QApplication class. This class creates
+    the GUI for the Diskmap application and provides functions for all of the
     application's events. It uses TileFrame and GUIWindow to create a window,
     menu, status bar and the frame where the Treemap tiles are rendered.'''
 
@@ -15,13 +15,15 @@ class DiskmapApp(QtGui.QApplication):
         '''Create a new DiskmapApp with arguments specified by args.'''
         super(DiskmapApp, self).__init__(args)
         # Application variables
-        self.__FPS = 60
+        # self.__FPS = 60
         self.__defaultStatus = "Please open a folder to map..."
         self.__mappedDir = ''
         self.__currentFile = ''
         # Configure the GUIWindow
-        self.__window = GUIWindow('Diskmap - Disk Visualization Utility', 640,
-                                  360, 'Resources/icon.png')
+        self.__window = GUIWindow('Diskmap - Disk Visualization Utility',
+                                  640,
+                                  360,
+                                  'assets/icon.svg')
         # Configure the Tileframe
         self.__tileframe = TileFrame(self.__window)
         self.__window.setCentralWidget(self.__tileframe)
@@ -61,23 +63,29 @@ class DiskmapApp(QtGui.QApplication):
         self.__window.addMenuSeperator('File')
         self.__window.addMenuItem('File', 'Quit', self.__window.close)
         # Setup Option menu items
-        self.__window.addMenuItem('Options', 'Screenshot',
+        self.__window.addMenuItem('Options',
+                                  'Screenshot',
                                   self.__eventScreenshot)
         self.__window.addMenuItem('Options', 'Clear Map', self.__eventClearMap)
         # Setup Settings menu items
-        self.__window.addCheckableMenuItem('Settings', 'Toggle Gradient',
-                                           False, self.__eventToggleGradient)
-        self.__window.addCheckableMenuItem('Settings', 'Toggle Borders',
-                                           True, self.__eventToggleBorders)
+        self.__window.addCheckableMenuItem('Settings',
+                                           'Gradient',
+                                           False,
+                                           self.__eventToggleGradient)
+        self.__window.addCheckableMenuItem('Settings',
+                                           'Borders',
+                                           True,
+                                           self.__eventToggleBorders)
         # Setup Help menu items
         self.__window.addMenuItem('Help', 'About', self.__eventAbout)
 
     def __showException(self, exception):
         '''Show a popup message box with the exception that occured.'''
-        message = 'The application has crashed!\n\nERROR: ' + \
-            exception.split(':')[0]
-        QtGui.QMessageBox.critical(self.__window, 'Error', message,
-                                   buttons=QtGui.QMessageBox.Ok)
+        message = "An unexpected error occured:\n\n {}".format(str(exception))
+        QtWidgets.QMessageBox.critical(self.__window,
+                                       'Error',
+                                       message,
+                                       buttons=QtWidgets.QMessageBox.Ok)
 
     def __eventUpdateStatus(self, event):
         '''Set the status bar text to the file path of the currently mouse
@@ -102,11 +110,11 @@ class DiskmapApp(QtGui.QApplication):
         # If mouse right click and map is created
         if event.button() == QtCore.Qt.RightButton and \
            self.__tileframe.isMapped():
-            menu = QtGui.QMenu()
+            menu = QtWidgets.QMenu()
             # Create menu items and bind events to them
-            renameFileAction = QtGui.QAction('Rename File', self)
-            moveFileAction = QtGui.QAction('Move File', self)
-            deleteFileAction = QtGui.QAction('Delete File', self)
+            renameFileAction = QtWidgets.QAction('Rename', self)
+            moveFileAction = QtWidgets.QAction('Move', self)
+            deleteFileAction = QtWidgets.QAction('Delete', self)
             renameFileAction.triggered.connect(self.__eventMenuRenameFile)
             moveFileAction.triggered.connect(self.__eventMenuMoveFile)
             deleteFileAction.triggered.connect(self.__eventMenuDeleteFile)
@@ -129,8 +137,9 @@ class DiskmapApp(QtGui.QApplication):
     def __eventMenuRenameFile(self):
         '''Rename a selected file to a new specified name.'''
         message = 'Enter a new name for file: ' + self.__getOnlyFilename()
-        text, result = QtGui.QInputDialog.getText(self.__window, 'Message',
-                                                  message)
+        text, result = QtWidgets.QInputDialog.getText(self.__window,
+                                                      'Message',
+                                                      message)
         # If ok was selected and text is no empty
         if result and text:
             # Rename the file and remap the directory
@@ -138,18 +147,18 @@ class DiskmapApp(QtGui.QApplication):
             try:
                 os.rename(self.__filename, newFilename)
                 self.__tileframe.updateMap(self.__mappedDir, False)
-            except:
+            except OSError as error:
                 # Exception raised, display message and terminate
-                self.__showException(str(sys.exc_info()[1]))
+                self.__showException(error)
                 self.__window.close()
 
     def __eventMenuMoveFile(self):
         '''Move a selected file to a new specified folder.'''
-        flags = QtGui.QFileDialog.ShowDirsOnly | QtGui.QFileDialog.\
+        flags = QtWidgets.QFileDialog.ShowDirsOnly | QtWidgets.QFileDialog.\
             DontUseNativeDialog
-        folder = QtGui.QFileDialog.getExistingDirectory(None,
-                                                        'Select a folder:',
-                                                        'C:\\', flags)
+        folder = QtWidgets.QFileDialog.getExistingDirectory(None,
+                                                            'Select a folder:',
+                                                            'C:\\', flags)
         # If a folder was selected
         if folder:
             # Move the file to the new destination and remap the directory
@@ -157,26 +166,28 @@ class DiskmapApp(QtGui.QApplication):
             try:
                 os.rename(self.__filename, newFileDestination)
                 self.__tileframe.updateMap(self.__mappedDir, False)
-            except:
+            except OSError as error:
                 # Exception raised, display message and terminate
-                self.__showException(str(sys.exc_info()[1]))
+                self.__showException(error)
                 self.__window.close()
 
     def __eventMenuDeleteFile(self):
         '''Delete a selected file.'''
         message = 'Are you sure you want to delete ' + \
             self.__getOnlyFilename() + '?'
-        result = QtGui.QMessageBox.question(self.__window, 'Message', message,
-                                            QtGui.QMessageBox.Yes,
-                                            QtGui.QMessageBox.No)
-        if result == QtGui.QMessageBox.Yes:
+        result = QtWidgets.QMessageBox.question(self.__window,
+                                                'Message',
+                                                message,
+                                                QtWidgets.QMessageBox.Yes,
+                                                QtWidgets.QMessageBox.No)
+        if result == QtWidgets.QMessageBox.Yes:
             try:
                 # Delete the file and remap the directory
                 os.remove(self.__filename)
                 self.__tileframe.updateMap(self.__mappedDir, False)
-            except:
+            except OSError as error:
                 # Exception raised, display message and terminate
-                self.__showException(str(sys.exc_info()[1]))
+                self.__showException(error)
                 self.__window.close()
 
     def __eventToggleBorders(self):
@@ -192,41 +203,43 @@ class DiskmapApp(QtGui.QApplication):
         save the screenshot as a .PNG file.'''
         # If a map is created
         if self.__tileframe.isMapped():
-            filename = QtGui.QFileDialog.getSaveFileName(self.__window,
-                                                         'Save Screenshot', '',
-                                                         'Images (*.png)',
-                                                         options=QtGui.
-                                                         QFileDialog.
-                                                         DontUseNativeDialog)
-            if filename:
-                if not filename.endswith('.png'):
-                    filename += '.png'
-                self.__tileframe.screenshot(filename)
+            fname = QtWidgets.QFileDialog.getSaveFileName(self.__window,
+                                                          'Save Screenshot',
+                                                          '',
+                                                          'Images (*.png)',
+                                                          options=QtWidgets.
+                                                          QFileDialog.
+                                                          DontUseNativeDialog)
+            if fname:
+                if not fname.endswith('.png'):
+                    fname += '.png'
+                self.__tileframe.screenshot(fname)
 
     def __eventMapFolder(self):
         '''Prompt the user to select a folder to use for creating the
         visualization map. Build the visualization if the user has selected a
         valid folder.'''
-        flags = QtGui.QFileDialog.ShowDirsOnly | QtGui.QFileDialog.\
+        flags = QtWidgets.QFileDialog.ShowDirsOnly | QtWidgets.QFileDialog.\
             DontUseNativeDialog
-        folder = QtGui.QFileDialog.getExistingDirectory(None,
-                                                        'Select a folder:',
-                                                        'C:\\', flags)
+        folder = QtWidgets.QFileDialog.getExistingDirectory(None,
+                                                            'Select a folder:',
+                                                            'C:\\', flags)
         # If a folder was selected
         if folder:
             # Store the mapped folder
             self.__mappedDir = folder
             try:
                 # Reset checkable menu items
-                self.__window.setCheckedMenuItem('Toggle Gradient', False)
-                self.__window.setCheckedMenuItem('Toggle Borders', True)
+                self.__window.setCheckedMenuItem('Gradient', False)
+                self.__window.setCheckedMenuItem('Borders', True)
                 # Update the map and build the tiles
                 self.__tileframe.updateMap(folder)
-            except:
+            except (OSError, ZeroDivisionError, AttributeError) as error:
                 # Exception raised, display message and terminate
-                self.__showException(str(sys.exc_info()[1]))
+                self.__showException(error)
                 self.__window.close()
-            self.__window.setStatusBar('')
+            finally:
+                self.__window.setStatusBar('')
 
     def __eventClearMap(self):
         '''Prompt the user to clear the visualization map. Clear the map, reset
@@ -235,24 +248,29 @@ class DiskmapApp(QtGui.QApplication):
         # If a map is created
         if self.__tileframe.isMapped():
             message = 'Are you sure you want to clear the visualization map?'
-            result = QtGui.QMessageBox.question(self.__window, 'Message',
-                                                message, QtGui.QMessageBox.Yes,
-                                                QtGui.QMessageBox.No)
-            if result == QtGui.QMessageBox.Yes:
+            result = QtWidgets.QMessageBox.question(self.__window,
+                                                    'Message',
+                                                    message,
+                                                    QtWidgets.QMessageBox.Yes,
+                                                    QtWidgets.QMessageBox.No)
+            if result == QtWidgets.QMessageBox.Yes:
                 # Reset checkable menu items
-                self.__window.setCheckedMenuItem('Toggle Gradient', False)
-                self.__window.setCheckedMenuItem('Toggle Borders', True)
+                self.__window.setCheckedMenuItem('Gradient', False)
+                self.__window.setCheckedMenuItem('Borders', True)
                 self.__tileframe.clearMap()
                 self.__window.setStatusBar(self.__defaultStatus)
 
     def __eventAbout(self):
         '''Display an information dialog about the program languages and tools
         used to create this application and the name of the developer.'''
-        message = 'Disk Space Visualization Utility\nPython 3 PyQ 4\n\n' + \
-            'Developed by Salinder Sidhu'
+        message = 'Disk Space Visualization Utility\n\nPython 3, PyQt 5\n' + \
+            '\nCreated by Salinder Sidhu'
         # Render the message box
-        QtGui.QMessageBox.information(self.__window, 'About', message,
-                                      buttons=QtGui.QMessageBox.Ok)
+        QtWidgets.QMessageBox.information(self.__window,
+                                          'About',
+                                          message,
+                                          buttons=QtWidgets.QMessageBox.Ok)
+
 
 if __name__ == '__main__':
     # Pass command line arguments into application

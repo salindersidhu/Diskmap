@@ -1,9 +1,9 @@
-from PyQt4 import QtGui
+from PyQt5 import QtGui, QtWidgets
 
 
-class GUIWindow(QtGui.QMainWindow):
-    '''GUIWindow the extends the QtGui.QMainWindow class. It creates a basic
-    window that contains a MenuBar and a StatusBar, both of which are
+class GUIWindow(QtWidgets.QMainWindow):
+    '''GUIWindow the extends the QtWidgets.QMainWindow class. It creates a
+    basic window that contains a MenuBar and a StatusBar, both of which are
     modifiable. The window includes advanced functionality such as appearing in
     the center of the screen binding of key and mouse events.'''
 
@@ -12,14 +12,14 @@ class GUIWindow(QtGui.QMainWindow):
         and window icon.'''
         super(GUIWindow, self).__init__()
         # Exceptions
-        self.__menuExistsException = Exception('The specified menu already' +
-                                               ' exists!')
-        self.__menuNotFoundException = Exception('The specified menu was ' +
-                                                 'not found!')
+        self.__menuExistsException = Exception(
+            'The specified menu already exists!')
+        self.__menuNotFoundException = Exception(
+            'The specified menu was not found!')
         # GUIWindow variables
         self.__menubar = self.menuBar()         # Menu Bar
         self.__menuDict = {}                    # Map of Menus for Menubar
-        self.__statusLabel = QtGui.QLabel()     # New Status label
+        self.__statusLabel = QtWidgets.QLabel()  # New Status label
         self.__keyInputDict = {}                # Map of key events
         self.__checkableActions = {}            # Map of checkable QActions
         self.__mouseMoveEvents = []             # List of mouse move events
@@ -66,7 +66,7 @@ class GUIWindow(QtGui.QMainWindow):
     def __centerOnScreen(self):
         '''Move the position of the window so that it is positioned perfectly
         in the center of the screen.'''
-        res = QtGui.QDesktopWidget().screenGeometry()
+        res = QtWidgets.QDesktopWidget().screenGeometry()
         move_width = (res.width() / 2) - (self.frameSize().width() / 2)
         move_height = (res.height() / 2) - (self.frameSize().height() / 2)
         self.move(move_width, move_height)
@@ -104,7 +104,7 @@ class GUIWindow(QtGui.QMainWindow):
         # Check if menuTitle exists
         if menuTitle in self.__menuDict:
             # Create the menu item
-            menuItem = QtGui.QAction('&' + menuItemName, self)
+            menuItem = QtWidgets.QAction('&' + menuItemName, self)
             if evtFunction:
                 menuItem.triggered.connect(lambda: evtFunction())
             # Add the menu items to the menu item dictionary
@@ -121,7 +121,8 @@ class GUIWindow(QtGui.QMainWindow):
         # Check if menuTitle exists
         if menuTitle in self.__menuDict:
             # Create the checkable menu item and set the check flag
-            menuItem = QtGui.QAction('&' + menuItemName, self, checkable=True)
+            menuItem = QtWidgets.QAction(
+                '&' + menuItemName, self, checkable=True)
             menuItem.setChecked(isChecked)
             # Store menu action item
             self.__checkableActions[menuItemName] = menuItem
