@@ -1,4 +1,4 @@
-from node import Node
+from .node import Node
 from random import randint
 from colorsys import hsv_to_rgb
 

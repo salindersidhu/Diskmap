@@ -1,5 +1,5 @@
 from treemap import Treemap
-from filenode import FileNode
+from structnodes.filenode import FileNode
 from PyQt5 import QtGui, QtCore, QtWidgets
 
 
