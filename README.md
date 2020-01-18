@@ -1,42 +1,130 @@
 # Diskmap
 
-## Overview:
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](/LICENSE.md)
 
-Diskmap is a hard drive space visualization utility. This program displays all the files and folders within a selected location as a rectangular map where each rectangle is proportional to the size of the file it represents. Each rectangular tile on the map is selectable; to select it simply hover over the tile with your mouse. Right click on a selected tile to bring up a popup menu containing options to rename, move and delete the selected file. For optimal viewing, it is recommend to use the application in full screen mode.
+# Table of Contents
+
+- [Overview](#overview)
+  - [Features](#features)
+  - [Supported Platforms](#supported-platforms)
+- [Development](#development)
+  - [Prerequisites](#prerequisites)
+  - [Setup](#setup)
+  - [Running](#running)
+  - [Contributing](#contributing)
+- [Codebase](#codebase)
+  - [Structure](#structure)
+
+# Overview:
+
+Diskmap is a hard drive space visualization utility. This program displays all the files and folders within a selected location as a rectangular map where each rectangle is proportional to the size of the file it represents. Each rectangular tile on the map is selectable; to select it simply hover over the tile with your mouse. Right click on a selected tile to bring up a popup menu containing options to rename, move and delete the selected file. For optimal viewing, it is recommended to use the application in full screen mode.
 
 <p align="center">
-	<img src="https://user-images.githubusercontent.com/12175684/40276085-c587a454-5bce-11e8-9084-36a94a6b9b57.png" alt="screenshot1"/>
-	<img src="https://user-images.githubusercontent.com/12175684/40276086-c5a0e6bc-5bce-11e8-8a87-c8877e90dd30.png" alt="screenshot2"/>
-</p>
-<p align="center">
-	<img src="https://user-images.githubusercontent.com/12175684/40276087-c5b1a984-5bce-11e8-884d-df0cd629fa21.png" alt="screenshot3"/>
-	<img src="https://user-images.githubusercontent.com/12175684/40276088-c5c0158c-5bce-11e8-9dc2-9029a5ff7fbe.png" alt="screenshot4"/>
+	<img src="https://user-images.githubusercontent.com/12175684/72670077-382ee180-3a07-11ea-9301-c2988f09ab13.gif" alt="screen capture"/>
 </p>
 
 ## Features:
 
 - Graphical visualization of files and folders
-- Rename files in the visualizer
-- Move files in the visualizer
-- Delete files in the visualizer
+- Rename, move and delete files in the visualizer
 - Save screenshots of the visualization
 
-## Support Platforms:
+## Supported Platforms:
 
 - Windows 10, Mac OS X and Linux based distributions
 
-## Dependencies:
+# Development
 
-- Python 3
-- PyQt 5
+> Information describing how to install and configure all the required tools to begin development.
 
-## Running the Visualizer:
+## Prerequisites:
 
-1. Download and install Python 3
+Ensure that you have the following installed and configured any environment variables.
 
-- Download and install PyQt 5
-- To launch the visualizer, open a terminal or command prompt and type `python diskmap.py`
+- **Python**
+  - Version 3.7.5+
 
-## License:
+## Setup:
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](/LICENSE.md)
+You will need to setup a python virtual environment and install the project's dependencies.
+
+1. Skip this step if you're using Windows. If you're using Mac or Linux, you may need to install `pip` and `virtualenv` first:
+
+```bash
+sudo apt-get install python3-pip
+sudo pip3 install virtualenv
+```
+
+2. Navigate to your Diskmap repo and create a new virtual environment with the following command:
+
+```bash
+# Windows
+python -m venv venv
+
+# Mac or Linux
+virtualenv venv
+```
+
+3. Enable your virtual environment with the following command:
+
+```bash
+# Windows
+source venv/Scripts/activate
+
+# Mac or Linux
+source venv/bin/activate
+```
+
+Your command line will be prefixed with `(venv)` which indicates that the virtual environment is enabled.
+
+4. Install the project's dependencies with the following command:
+
+```bash
+pip install -r requirements.txt
+```
+
+## Running:
+
+1. Enable your virtual environment with the following command:
+
+```bash
+# Windows
+source venv/Scripts/activate
+
+# Mac or Linux
+source venv/bin/activate
+```
+
+2. Launch the visualizer with the following command:
+
+```bash
+python diskmap.py
+```
+
+## Contributing
+
+Diskmap welcomes contributions from anyone and everyone. Please see our [contributing guide](/CONTRIBUTING.md) for more info.
+
+# Codebase
+
+> Information describing the software architecture and how to maintain it while adding additional functionality.
+
+## Structure
+
+    .
+    ├── ...
+    ├── assets                      # Assets
+    │    ├── icon.svg               # Diskmap window icon
+    │    └── ...
+    ├── structnodes                 # Python package for Node data structures
+    │   ├── __init__.py             # Package init file
+    │   ├── dirnode.py              # Directory node data structure
+    │   ├── filenode.py             # File node data structure
+    │   ├── node.py                 # Node data structure
+    │   └── ...
+    ├── diskmap.py                  # Main application
+    ├── guiwindow.py                # PyQt5 GUI window setup and config
+    ├── tileframe.py                # PyQt4 frame for rending the treemap
+    ├── treemap.py                  # Logic to generate a recursive treemap of the file structure
+    ├── requirements.txt            # Dependencies to install with pip
+    └── ...
