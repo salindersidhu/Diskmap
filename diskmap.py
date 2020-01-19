@@ -15,7 +15,6 @@ class DiskmapApp(QtWidgets.QApplication):
         '''Create a new DiskmapApp with arguments specified by args.'''
         super(DiskmapApp, self).__init__(args)
         # Application variables
-        # self.__FPS = 60
         self.__defaultStatus = "Please open a folder to map..."
         self.__mappedDir = ''
         self.__currentFile = ''
@@ -234,7 +233,7 @@ class DiskmapApp(QtWidgets.QApplication):
                 self.__window.setCheckedMenuItem('Borders', True)
                 # Update the map and build the tiles
                 self.__tileframe.updateMap(folder)
-            except (OSError, ZeroDivisionError, AttributeError) as error:
+            except (Exception) as error:
                 # Exception raised, display message and terminate
                 self.__showException(error)
                 self.__window.close()

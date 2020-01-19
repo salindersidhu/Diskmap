@@ -124,7 +124,7 @@ Diskmap welcomes contributions from anyone and everyone. Please see our [contrib
     │   └── ...
     ├── diskmap.py                  # Main application
     ├── guiwindow.py                # PyQt5 GUI window setup and config
-    ├── tileframe.py                # PyQt4 frame for rending the treemap
+    ├── tileframe.py                # PyQt5 frame for rending the treemap
     ├── treemap.py                  # Logic to generate a recursive treemap of the file structure
     ├── requirements.txt            # Dependencies to install with pip
     └── ...
