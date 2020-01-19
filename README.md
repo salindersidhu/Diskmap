@@ -83,6 +83,8 @@ Your command line will be prefixed with `(venv)` which indicates that the virtua
 pip install -r requirements.txt
 ```
 
+If you have recently pulled changes from a remote branch, you should re-run the above command to obtain any new dependencies that may have been added to the project.
+
 ## Running:
 
 1. Enable your virtual environment with the following command:
