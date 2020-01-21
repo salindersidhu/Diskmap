@@ -1,6 +1,6 @@
 import os
-from structnodes.dirnode import DirNode
-from structnodes.filenode import FileNode
+from .dirnode import DirNode
+from .filenode import FileNode
 
 
 class Treemap:

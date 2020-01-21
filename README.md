@@ -118,8 +118,8 @@ Diskmap welcomes contributions from anyone and everyone. Please see our [contrib
     ├── assets                      # Assets
     │    ├── icon.svg               # Diskmap window icon
     │    └── ...
-    ├── structnodes                 # Python package for Node data structures
-    │   ├── __init__.py             # Package init file
+    ├── treemap                     # Python Treemap package and it's node data structures
+    │   ├── __init__.py             # Package main file generates a recursive treemap of the file structure
     │   ├── dirnode.py              # Directory node data structure
     │   ├── filenode.py             # File node data structure
     │   ├── node.py                 # Node data structure
@@ -127,6 +127,5 @@ Diskmap welcomes contributions from anyone and everyone. Please see our [contrib
     ├── diskmap.py                  # Main application
     ├── guiwindow.py                # PyQt5 GUI window setup and config
     ├── tileframe.py                # PyQt5 frame for rending the treemap
-    ├── treemap.py                  # Logic to generate a recursive treemap of the file structure
     ├── requirements.txt            # Dependencies to install with pip
     └── ...
