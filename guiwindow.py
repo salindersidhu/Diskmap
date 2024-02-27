@@ -27,7 +27,7 @@ class GUIWindow(QtWidgets.QMainWindow):
         self.__mouseReleaseEvents = []          # List of mouse release events
         # Configure the window's properties
         self.setGeometry(0, 0, winWidth, winHeight)
-        self.setMinimumSize(winWidth / 2, winHeight / 2)
+        self.setMinimumSize(int(winWidth / 2), int(winHeight / 2))
         self.setWindowTitle(winTitle)
         self.setWindowIcon(QtGui.QIcon(winIcon))
         # Bind the QLabel to the Status Bar
@@ -69,7 +69,7 @@ class GUIWindow(QtWidgets.QMainWindow):
         res = QtWidgets.QDesktopWidget().screenGeometry()
         move_width = (res.width() / 2) - (self.frameSize().width() / 2)
         move_height = (res.height() / 2) - (self.frameSize().height() / 2)
-        self.move(move_width, move_height)
+        self.move(int(move_width), int(move_height))
 
     def updateMouseEvents(self, moveEvents, clickEvents, releaseEvents):
         '''Update the mouse event lists for movement, clicking and releasing as
