@@ -32,7 +32,10 @@ class TileFrame(QtWidgets.QFrame):
         with the border colour and render the FileNodes as rectangular tiles.
         Render the FileNodes with gradient colours iff gradients are enabled
         and render with a fixed colour otherwise.'''
-        borderRect = QtCore.QRect(location[0], location[1], size[0], size[1])
+        borderRect = QtCore.QRect(int(location[0]),
+                                  int(location[1]),
+                                  int(size[0]),
+                                  int(size[1]))
         # If rendering borders is enabled
         if self.__isBorders:
             # Shift the dimensions of the rectangle
@@ -94,7 +97,7 @@ class TileFrame(QtWidgets.QFrame):
             x2 = size[0] + 1
             y2 = size[1] + 1
             # Store a map of the file nodes and their display rectangle tiles
-            rect = QtCore.QRect(x1, y1, x2, y2)
+            rect = QtCore.QRect(int(x1), int(y1), int(x2), int(y2))
             self.__rectNodes.append((rect, node))
             # Set the top and bottom gradient colours to the Node's hover
             # colours if the file's node is selected, otherwise obtain the top
@@ -111,8 +114,8 @@ class TileFrame(QtWidgets.QFrame):
             gradY2 = location[1] + size[1]
             # Render the tile as a gradient
             grad = QtGui.QLinearGradient(gradX1, gradY1, gradX2, gradY2)
-            grad.setColorAt(0.0, QtGui.QColor(topCol[0], topCol[1], topCol[2]))
-            grad.setColorAt(1.0, QtGui.QColor(botCol[0], botCol[1], botCol[2]))
+            grad.setColorAt(0.0, QtGui.QColor(int(topCol[0]), int(topCol[1]), int(topCol[2])))
+            grad.setColorAt(1.0, QtGui.QColor(int(botCol[0]), int(botCol[1]), int(botCol[2])))
             painter.setPen(QtCore.Qt.NoPen)
             painter.setBrush(QtGui.QBrush(grad))
             painter.drawRect(rect)
@@ -131,7 +134,7 @@ class TileFrame(QtWidgets.QFrame):
             y1 = size[0] + 1
             y2 = size[1] + 1
             # Store a map of the file nodes and their display rectangle tiles
-            rect = QtCore.QRect(x1, x2, y1, y2)
+            rect = QtCore.QRect(int(x1), int(x2), int(y1), int(y2))
             self.__rectNodes.append((rect, node))
             # Obtain the file's hover colour if it is selected otherwise obtain
             # it's regular top gradient colour
@@ -139,7 +142,10 @@ class TileFrame(QtWidgets.QFrame):
                 col = node.getHColour()
             else:
                 col = node.getTColour()
-            painter.fillRect(rect, QtGui.QColor(col[0], col[1], col[2]))
+            painter.fillRect(rect, QtGui.QColor(
+                int(col[0]),
+                int(col[1]),
+                int(col[2])))
         # Recursively render the next tile in the Treemap
         self.__buildTiles(painter, node, size, location[:])
 
