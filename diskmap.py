@@ -202,13 +202,12 @@ class DiskmapApp(QtWidgets.QApplication):
         save the screenshot as a .PNG file.'''
         # If a map is created
         if self.__tileframe.isMapped():
-            fname = QtWidgets.QFileDialog.getSaveFileName(self.__window,
-                                                          'Save Screenshot',
-                                                          '',
-                                                          'Images (*.png)',
-                                                          options=QtWidgets.
-                                                          QFileDialog.
-                                                          DontUseNativeDialog)
+            fname, _ = QtWidgets.QFileDialog.getSaveFileName(
+                self.__window,
+                'Save Screenshot',
+                '',
+                'Images (*.png)',
+                options=QtWidgets.QFileDialog.DontUseNativeDialog)
             if fname:
                 if not fname.endswith('.png'):
                     fname += '.png'

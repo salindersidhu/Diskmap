@@ -1,7 +1,7 @@
 from treemap import Treemap
 from treemap.filenode import FileNode
 from PyQt5 import QtGui, QtCore, QtWidgets
-
+from PyQt5.QtWidgets import QApplication
 
 class TileFrame(QtWidgets.QFrame):
     '''TileFrame extends the QtGui.QFrame class. It is used to render the
@@ -191,7 +191,7 @@ class TileFrame(QtWidgets.QFrame):
     def screenshot(self, filename):
         '''Obtain a pixel map of the current window and save it as a .PNG
         file with the name specified by filename.'''
-        QtGui.QPixmap.grabWindow(self.winId()).save(filename, 'png')
+        QApplication.primaryScreen().grabWindow(self.winId()).save(filename, 'png')
 
     def clearMap(self):
         '''Reset the visual map variables and clear the Treemap.'''
