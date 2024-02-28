@@ -1,50 +1,33 @@
 # Diskmap
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](/LICENSE.md)
+[![License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=for-the-badge)](/LICENSE)
 
-# Table of Contents
+# Overview
 
-- [Overview](#overview)
-  - [Features](#features)
-  - [Supported Platforms](#supported-platforms)
-- [Development](#development)
-  - [Prerequisites](#prerequisites)
-  - [Setup](#setup)
-  - [Running](#running)
-  - [Contributing](#contributing)
-- [Codebase](#codebase)
-  - [Structure](#structure)
+Diskmap is a hard drive space visualization utility. This program displays all the files and folders within a selected location as a rectangular map where each rectangle is proportional to the size of the file it represents. Each rectangular tile on the map is selectable; to select it simply hover over the tile with your mouse. Right click on a selected tile to bring up a popup menu containing options to rename, move and delete the selected file. For optimal viewing, it is recommended to use the application in full screen mode. Built using Python and other open source technologies.
 
-# Overview:
-
-Diskmap is a hard drive space visualization utility. This program displays all the files and folders within a selected location as a rectangular map where each rectangle is proportional to the size of the file it represents. Each rectangular tile on the map is selectable; to select it simply hover over the tile with your mouse. Right click on a selected tile to bring up a popup menu containing options to rename, move and delete the selected file. For optimal viewing, it is recommended to use the application in full screen mode.
-
-<p align="center">
-	<img src="https://user-images.githubusercontent.com/12175684/72670077-382ee180-3a07-11ea-9301-c2988f09ab13.gif" alt="screen capture"/>
+<p float="left">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg" height="150" width="150">
+    <img src="https://pic4.zhimg.com/v2-f7c3d79d423db49691daaf3b78e3fb07_ipico.jpg" height="150" width="150">
 </p>
 
-## Features:
+## Features
+
+<p align="left">
+	<img src="https://user-images.githubusercontent.com/12175684/72670077-382ee180-3a07-11ea-9301-c2988f09ab13.gif" alt="screen capture"/>
+</p>
 
 - Graphical visualization of files and folders
 - Rename, move and delete files in the visualizer
 - Save screenshots of the visualization
 
-## Supported Platforms:
+## Prerequisite Software
 
-- Windows 10, Mac OS X and Linux based distributions
+| Software       | Version   |
+| :------------- | :-------- |
+| Python         | 3.11+     |
 
-# Development
-
-> Information describing how to install and configure all the required tools to begin development.
-
-## Prerequisites:
-
-Ensure that you have the following installed and configured any environment variables.
-
-- **Python**
-  - Version 3.7.5+
-
-## Setup:
+## Getting Started
 
 You will need to setup a python virtual environment and install the project's dependencies.
 
@@ -85,7 +68,7 @@ pip install -r requirements.txt
 
 If you have recently pulled changes from a remote branch, you should re-run the above command to obtain any new dependencies that may have been added to the project.
 
-## Running:
+## Running
 
 1. Enable your virtual environment with the following command:
 
@@ -105,13 +88,9 @@ python diskmap.py
 
 ## Contributing
 
-Diskmap welcomes contributions from anyone and everyone. Please see our [contributing guide](/CONTRIBUTING.md) for more info.
+Please see our [Contributing Guide](/CONTRIBUTING.md) for more info.
 
-# Codebase
-
-> Information describing the software architecture and how to maintain it while adding additional functionality.
-
-## Structure
+## Project Structure
 
     .
     ├── ...
