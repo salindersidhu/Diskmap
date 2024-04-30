@@ -50,27 +50,27 @@ git remote add upstream https://github.com/salindersidhu/Diskmap.git
 git fetch upstream
 ```
 
-3. Checkout the master branch and merge in the changes from the upstream repository's master branch:
+3. Checkout the main branch and merge in the changes from the upstream repository's main branch:
 
 ```bash
-git checkout master
-git merge upstream/master
+git checkout main
+git merge upstream/main
 ```
 
 ### Creating a Development Branch
 
-A new branch is required when working on a new feature or bug fix. This ensures that your changes are kept seperate from the master branch making it easier to manage multiple pull requests for every task you complete.
+A new branch is required when working on a new feature or bug fix. This ensures that your changes are kept seperate from the main branch making it easier to manage multiple pull requests for every task you complete.
 
-1. Checkout the master branch as the starting point for the development branch:
+1. Checkout the main branch as the starting point for the development branch:
 
 ```bash
-git checkout master
+git checkout main
 ```
 
 2. Create a new development branch on your local machine and switch to it:
 
 ```bash
-git checkout -b {prefix}/branch-name origin/master
+git checkout -b {prefix}/branch-name origin/main
 ```
 
 _Prefix is either `hotfix`, `feature` or `experiment` depending on the type of development work._
@@ -87,7 +87,7 @@ fast-forward free of merge conflicts.
 
 ```bash
 git checkout {prefix}/branch-name
-git rebase master
+git rebase main
 ```
 
 Once you have committed and pushed all of your changes on your development branch to GitHub, go to the page for your fork on GitHub, select your development branch and click the pull request button. Once a pull request has been made, you can continue to make changes to the development branch and your pull request will automatically track the changes and update.
