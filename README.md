@@ -6,10 +6,7 @@
 
 Diskmap is a hard drive space visualization utility. This program displays all the files and folders within a selected location as a rectangular map where each rectangle is proportional to the size of the file it represents. Each rectangular tile on the map is selectable; to select it simply hover over the tile with your mouse. Right click on a selected tile to bring up a popup menu containing options to rename, move and delete the selected file. For optimal viewing, it is recommended to use the application in full screen mode. Built using Python and other open source technologies.
 
-<p float="left">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg" height="150" width="150">
-    <img src="https://pic4.zhimg.com/v2-f7c3d79d423db49691daaf3b78e3fb07_ipico.jpg" height="150" width="150">
-</p>
+<img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg" width="150" /> <img src="https://pic4.zhimg.com/v2-f7c3d79d423db49691daaf3b78e3fb07_ipico.jpg" width="150" />
 
 ## Features
 
